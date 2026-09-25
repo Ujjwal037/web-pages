@@ -1,0 +1,773 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DSA with Java - Pattern-first roadmap</title>
+<style>
+:root{--bg:#f5f7fb;--panel:#fff;--panel2:#f8fafc;--text:#172033;--muted:#64748b;--line:#e2e8f0;--brand:#4f46e5;--brand2:#7c3aed;--soft:#eef2ff;--green:#15803d;--amber:#b45309;--red:#b91c1c;--code:#111827;--shadow:0 12px 35px rgba(15,23,42,.08)}
+[data-theme=dark]{--bg:#0b1120;--panel:#111827;--panel2:#172033;--text:#e5e7eb;--muted:#94a3b8;--line:#293548;--brand:#818cf8;--brand2:#a78bfa;--soft:#1e1b4b;--green:#4ade80;--amber:#fbbf24;--red:#f87171;--code:#080d18;--shadow:none}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--text);font:15px/1.6 Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
+button,input{font:inherit}.app{display:grid;grid-template-columns:300px minmax(0,1fr);min-height:100vh}
+aside{position:sticky;top:0;height:100vh;background:var(--panel);border-right:1px solid var(--line);display:flex;flex-direction:column;z-index:10}
+.logo{padding:22px 20px 16px;border-bottom:1px solid var(--line)}.logo b{font-size:18px}.logo span{display:block;color:var(--muted);font-size:12px;margin-top:3px}
+.side-tools{display:flex;gap:8px;padding:12px;border-bottom:1px solid var(--line)}.icon{width:38px;height:38px;border:1px solid var(--line);border-radius:10px;background:var(--panel2);color:var(--text);cursor:pointer}
+.home{flex:1;text-align:left;padding:0 12px;width:auto;font-weight:700}
+.nav{overflow:auto;padding:10px}.tab{width:100%;border:0;background:transparent;color:var(--text);display:grid;grid-template-columns:30px 1fr auto;align-items:center;gap:8px;text-align:left;padding:9px 10px;border-radius:10px;cursor:pointer;margin:2px 0}
+.tab:hover,.tab.active{background:var(--soft);color:var(--brand)}.tab .n{width:27px;height:27px;display:grid;place-items:center;border-radius:8px;background:var(--panel2);font-size:11px;font-weight:800}.tab small{color:var(--muted);font-size:10px}
+.side-progress{border-top:1px solid var(--line);padding:13px 16px;font-size:12px;color:var(--muted)}.bar{height:6px;background:var(--line);border-radius:99px;overflow:hidden;margin-top:7px}.bar>i{display:block;height:100%;background:linear-gradient(90deg,var(--brand),var(--brand2));width:0}
+main{min-width:0}.mobile{display:none;position:sticky;top:0;z-index:8;padding:10px 14px;background:var(--panel);border-bottom:1px solid var(--line)}.mobile button{border:1px solid var(--line);background:var(--panel2);color:var(--text);border-radius:9px;padding:7px 12px}
+.page{max-width:1180px;margin:auto;padding:42px 46px}
+.hero{border-radius:24px;padding:42px;background:linear-gradient(135deg,#312e81,#6d28d9);color:white;box-shadow:var(--shadow)}.hero .eyebrow{text-transform:uppercase;letter-spacing:.14em;font-size:11px;font-weight:800;opacity:.8}.hero h1{font-size:clamp(32px,5vw,60px);line-height:1.04;margin:12px 0 16px;max-width:850px}.hero p{font-size:18px;max-width:800px;opacity:.9}.hero-stats{display:flex;flex-wrap:wrap;gap:28px;margin-top:28px}.hero-stats b{font-size:25px;display:block}.hero-stats span{font-size:12px;opacity:.75}
+h1,h2,h3{line-height:1.25}h2{font-size:26px;margin:38px 0 16px}h3{font-size:17px;margin:0 0 8px}.lead{font-size:17px;color:var(--muted);max-width:900px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:20px;box-shadow:var(--shadow)}.card p{color:var(--muted);margin-bottom:0}.step{display:flex;gap:13px}.step b{flex:0 0 30px;height:30px;border-radius:10px;background:var(--soft);color:var(--brand);display:grid;place-items:center}
+.path{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.path button{border:1px solid var(--line);background:var(--panel);color:var(--text);border-radius:13px;padding:13px;text-align:left;cursor:pointer}.path button:hover{border-color:var(--brand);transform:translateY(-1px)}.path strong{display:block}.path span{font-size:11px;color:var(--muted)}
+.pattern-head{display:flex;gap:18px;align-items:flex-start}.pattern-num{flex:0 0 54px;height:54px;border-radius:16px;display:grid;place-items:center;background:linear-gradient(135deg,var(--brand),var(--brand2));color:white;font-weight:900;font-size:20px}.pattern-head h1{margin:0;font-size:38px}.pattern-head .order{color:var(--brand);font-weight:900;font-size:12px;text-transform:uppercase;letter-spacing:.1em}
+.meta{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0}.pill{padding:5px 10px;border-radius:99px;background:var(--soft);color:var(--brand);font-size:12px;font-weight:700}
+.brief{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:20px;margin:20px 0}.brief b{color:var(--brand)}.brief p{margin:5px 0}
+.scenario-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}.scenario{border:1px solid var(--line);border-radius:15px;overflow:hidden;background:var(--panel)}.scenario h3{padding:14px 16px;margin:0;border-bottom:1px solid var(--line)}pre{margin:0;padding:16px;background:var(--code);color:#dbeafe;overflow:auto;font:12.5px/1.55 "Cascadia Code",Consolas,monospace;min-height:120px}
+.callout{border-left:4px solid var(--amber);background:var(--panel);padding:14px 17px;border-radius:8px;margin:18px 0;color:var(--muted)}.callout b{color:var(--text)}
+.problem-tools{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0}.problem-tools input{flex:1;min-width:220px;border:1px solid var(--line);background:var(--panel);color:var(--text);border-radius:10px;padding:10px 12px}.filters{display:flex;gap:6px}.filters button{border:1px solid var(--line);background:var(--panel);color:var(--muted);border-radius:8px;padding:8px 11px;cursor:pointer}.filters button.active{background:var(--soft);border-color:var(--brand);color:var(--brand)}
+.problems{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.problem{display:grid;grid-template-columns:28px 54px 1fr auto;align-items:center;gap:9px;background:var(--panel);border:1px solid var(--line);border-radius:11px;padding:10px 12px}.problem:hover{border-color:var(--brand)}.problem input{width:17px;height:17px;accent-color:var(--brand)}.problem .id{font-size:11px;color:var(--muted)}.problem a{color:var(--text);font-weight:650;text-decoration:none}.problem a:hover{color:var(--brand)}.difficulty{font-size:10px;font-weight:800;padding:3px 7px;border-radius:99px}.Easy{background:#dcfce7;color:#166534}.Medium{background:#fef3c7;color:#92400e}.Hard{background:#fee2e2;color:#991b1b}
+.pattern-progress{display:flex;align-items:center;gap:12px;color:var(--muted);font-size:13px}.pattern-progress .bar{width:180px;margin:0}.exit{background:linear-gradient(135deg,var(--soft),var(--panel));border:1px solid var(--brand);border-radius:14px;padding:17px;margin-top:22px}.exit b{color:var(--brand)}
+.empty{color:var(--muted);padding:25px}.footer{margin-top:45px;color:var(--muted);font-size:12px}.hidden{display:none!important}
+@media (max-width:950px){.app{grid-template-columns:1fr}aside{position:fixed;left:0;transform:translateX(-105%);width:300px;transition:.2s;box-shadow:var(--shadow)}aside.open{transform:none}.mobile{display:block}.page{padding:26px 18px 80px}.grid{grid-template-columns:1fr}.path{grid-template-columns:repeat(2,1fr)}.scenario-grid,.problems{grid-template-columns:1fr}}
+@media (max-width:560px){.hero{padding:28px 22px}.path{grid-template-columns:1fr}.pattern-head h1{font-size:28px}.pattern-num{flex-basis:45px;height:45px}.problem{grid-template-columns:25px 46px 1fr}.difficulty{display:none}}
+@media print{aside,.mobile,.problem-tools,.icon{display:none!important}.app{display:block}.page{padding:0}.scenario-grid,.problems{grid-template-columns:1fr}.problem input{display:none}}
+</style>
+</head>
+<body>
+<div class="app">
+    <aside id="sidebar">
+        <div class="logo"><b>DSA with Java</b><span>Pattern-first interview roadmap</span></div>
+        <div class="side-tools"><button class="icon home" data-go="home" title="Start here">🏠</button><button class="icon" id="theme" title="Toggle Theme">🌓</button></div>
+        <nav class="nav" id="nav"></nav>
+        <div class="side-progress"><span id="overallText">0 / 400 solved</span><div class="bar"><i id="overallBar"></i></div></div>
+    </aside>
+    <main>
+        <div class="mobile"><button id="menu">☰ Patterns</button></div>
+        <div class="page" id="page"></div>
+    </main>
+</div>
+
+<script>
+const P = (number, title, brief, recognize, study, theory, scenarios, pitfalls, exit, raw) => ({
+    number, title, brief, recognize, study, theory, scenarios, pitfalls, exit,
+    problems: raw.trim().split("\n").filter(x => x).map(x => { const [id, name, slug, difficulty] = x.split("|"); return {id, name, slug, difficulty} })
+});
+
+const patterns = [
+    P(0, "Brute Force & Complexity", 
+    "Enumerate every valid candidate and check it. Brute force is the first correct baseline, a test oracle for tiny inputs, and the source of most optimizations.", 
+    "All pairs; all ranges; try every choice; direct simulation; small constraints.", 
+    "Loops → count operations → all pairs → incremental subarrays → simulation → subset masks.",
+    "Before reaching for complex structures, establish the Big-O upper bound. In Java, nested for-loops over arrays exploit spatial locality in the CPU cache, meaning an O(n²) brute-force on a contiguous primitive array can occasionally outperform an O(n log n) complex object-based structure for very small N (N < 50) due to avoiding object instantiation and garbage collection overhead.",
+    [
+        ["Loops = count operations", "all pairs = incremental subarrays = simulation = subset masks."],
+        ["All pairs, O(n^2) time", "for i = 0 .. n-1:\n  for j = i+1 .. n-1:\n    evaluate(a[i], a[j])"],
+        ["All subarrays, O(n^2)", "for left = 0 .. n-1:\n  running = 0\n  for right = left .. n-1:\n    running += a[right]\n    evaluate(left, right, running)"],
+        ["Direct simulation", "state = initial\nfor command in commands:\n  update state exactly as specified\nreturn state"],
+        ["Subset masks, O(2^n * n)", "for mask = 0 .. (1<<n)-1:\n  for bit = 0 .. n-1:\n    if ((mask>>bit)&1) == 1:\n      choose a[bit]"]
+    ], 
+    "Accidental O(n^3): overflow in inner mutating input; calling O(n) methods inside loops without checking constraints.", 
+    "State the search space, derive time/space, then identify and remove one repeated computation.", 
+    `1672|Richest Customer Wealth|richest-customer-wealth|Easy
+9|Palindrome Number|palindrome-number|Easy
+13|Roman to Integer|roman-to-integer|Easy
+14|Longest Common Prefix|longest-common-prefix|Easy
+66|Plus One|plus-one|Easy
+69|Sqrt(x)|sqrtx|Easy
+118|Pascal's Triangle|pascals-triangle|Easy
+119|Pascal's Triangle II|pascals-triangle-ii|Easy
+136|Single Number|single-number|Easy
+169|Majority Element|majority-element|Easy
+171|Excel Sheet Column Number|excel-sheet-column-number|Easy
+191|Number of 1 Bits|number-of-1-bits|Easy
+202|Happy Number|happy-number|Easy
+204|Count Primes|count-primes|Medium
+231|Power of Two|power-of-two|Easy
+258|Add Digits|add-digits|Easy
+268|Missing Number|missing-number|Easy
+412|Fizz Buzz|fizz-buzz|Easy
+461|Hamming Distance|hamming-distance|Easy
+1108|Defanging an IP Address|defanging-an-ip-address|Easy
+1281|Subtract the Product and Sum of Digits of an Integer|subtract-the-product-and-sum-of-digits-of-an-integer|Easy
+1512|Number of Good Pairs|number-of-good-pairs|Easy
+1480|Running Sum of 1d Array|running-sum-of-1d-array|Easy
+1431|Kids With the Greatest Number of Candies|kids-with-the-greatest-number-of-candies|Easy
+1342|Number of Steps to Reduce a Number to Zero|number-of-steps-to-reduce-a-number-to-zero|Easy`),
+
+    P(1, "Arrays & Hashing", 
+    "Arrays provide O(1) indexed access. Hashing uses extra memory for average O(1) membership, counts, complements, and grouping.", 
+    "Have we seen it; frequency; duplicates; pair with target; group by a canonical property.", 
+    "Array traversal → HashSet → Frequency map → Complement lookup → Canonical grouping → Index masking.",
+    "In enterprise Java, HashMap and HashSet introduce significant overhead via object boxing (e.g., Integer vs int). Under the hood, Java 17+ resolves hash collisions using balanced Red-Black trees (O(log n)) when bucket size exceeds 8. For high-performance algorithmic tasks, mapping ASCII characters or bounded integers to a primitive array (e.g., int[256]) instead of a HashMap drastically reduces memory footprint and latency.",
+    [
+        ["Seen Set, O(n) avg", "seen = HashSet\nfor x in a:\n  if seen.contains(x): return true\n  seen.add(x)"],
+        ["Complement Map, O(n) avg", "map = value -> index\nfor i = 0 .. n-1:\n  need = target - a[i]\n  if map contains need: return pair\n  map[a[i]] = i"],
+        ["Frequency Map", "freq = HashMap\nfor x in input:\n  freq[x] = getOrDefault(x,0)+1"],
+        ["Canonical Grouping", "for item in items:\n  key = canonicalForm(item)\n  groups.computeIfAbsent(key, ...).add(item)"]
+    ], 
+    "Mutable keys; expecting HashMap insertion order; boxing overhead; missing equals/hashCode; complement overflow.", 
+    "Choose array, set, or map intentionally and explain average versus worst-case lookup.", 
+    `1|Two Sum|two-sum|Easy
+217|Contains Duplicate|contains-duplicate|Easy
+219|Contains Duplicate II|contains-duplicate-ii|Easy
+242|Valid Anagram|valid-anagram|Easy
+383|Ransom Note|ransom-note|Easy
+387|First Unique Character in a String|first-unique-character-in-a-string|Easy
+349|Intersection of Two Arrays|intersection-of-two-arrays|Easy
+350|Intersection of Two Arrays II|intersection-of-two-arrays-ii|Easy
+1207|Unique Number of Occurrences|unique-number-of-occurrences|Easy
+448|Find All Numbers Disappeared in an Array|find-all-numbers-disappeared-in-an-array|Easy
+49|Group Anagrams|group-anagrams|Medium
+128|Longest Consecutive Sequence|longest-consecutive-sequence|Medium
+238|Product of Array Except Self|product-of-array-except-self|Medium
+36|Valid Sudoku|valid-sudoku|Medium
+442|Find All Duplicates in an Array|find-all-duplicates-in-an-array|Medium
+454|4Sum II|4sum-ii|Medium
+73|Set Matrix Zeroes|set-matrix-zeroes|Medium
+54|Spiral Matrix|spiral-matrix|Medium
+48|Rotate Image|rotate-image|Medium
+41|First Missing Positive|first-missing-positive|Hard
+287|Find the Duplicate Number|find-the-duplicate-number|Medium
+560|Subarray Sum Equals K|subarray-sum-equals-k|Medium
+229|Majority Element II|majority-element-ii|Medium
+414|Third Maximum Number|third-maximum-number|Easy
+149|Max Points on a Line|max-points-on-a-line|Hard`),
+
+    P(2, "Two Pointers", 
+    "Move two indices while preserving an invariant. This replaces nested loops with linear scans on sorted, mirrored, merged, or compacted data.", 
+    "Sorted pair/triplet; palindrome; remove/compact; merge; partition; compare both ends.", 
+    "Opposite ends → read/write compaction → merge sorted inputs → three-way partition.",
+    "Two-pointer convergence maintains loop invariants across sorted sequences without re-allocating memory. It eliminates inner loop checks by utilizing monotonic order where moving one pointer strictly increases or decreases the evaluated metric. In Java, primitive array sorting uses Dual-Pivot Quicksort (O(1) extra space), making in-place modifications zero-allocation.",
+    [
+        ["Opposite ends", "left=0; right=n-1\nwhile left < right:\n  val = combine(a[left], a[right])\n  if val == target: return\n  if val < target: left++\n  else: right--"],
+        ["Read/write compaction", "write=0\nfor read=0 .. n-1:\n  if keep(a[read]):\n    a[write++] = a[read]\nreturn write"],
+        ["Merge sorted inputs", "i=0; j=0\nwhile i<n and j<m:\n  take the smaller item\nappend leftovers"],
+        ["Three-way partition", "low=0; scan=0; high=n-1\nwhile scan<=high:\n  if a[scan]<mid: swap(low++, scan++)\n  else if a[scan]>mid: swap(scan, high--)\n  else: scan++"]
+    ], 
+    "Sorting may destroy original indices; stale tail data left behind after compaction; wrong '<' versus '<=' in loop bounds; integer sum overflow.", 
+    "Write all scenarios and justify why each pointer movement cannot discard the valid answer.", 
+    `344|Reverse String|reverse-string|Easy
+125|Valid Palindrome|valid-palindrome|Easy
+680|Valid Palindrome II|valid-palindrome-ii|Easy
+26|Remove Duplicates from Sorted Array|remove-duplicates-from-sorted-array|Easy
+27|Remove Element|remove-element|Easy
+283|Move Zeroes|move-zeroes|Easy
+88|Merge Sorted Array|merge-sorted-array|Easy
+977|Squares of a Sorted Array|squares-of-a-sorted-array|Easy
+167|Two Sum II|two-sum-ii-input-array-is-sorted|Medium
+15|3Sum|3sum|Medium
+11|Container With Most Water|container-with-most-water|Medium
+75|Sort Colors|sort-colors|Medium
+881|Boats to Save People|boats-to-save-people|Medium
+189|Rotate Array|rotate-array|Medium
+42|Trapping Rain Water|trapping-rain-water|Hard
+16|3Sum Closest|3sum-closest|Medium
+18|4Sum|4sum|Medium
+28|Find the Index of the First Occurrence in a String|find-the-index-of-the-first-occurrence-in-a-string|Easy
+392|Is Subsequence|is-subsequence|Easy
+345|Reverse Vowels of a String|reverse-vowels-of-a-string|Easy
+1768|Merge Strings Alternately|merge-strings-alternately|Easy
+844|Backspace String Compare|backspace-string-compare|Easy
+905|Sort Array By Parity|sort-array-by-parity|Easy
+922|Sort Array By Parity II|sort-array-by-parity-ii|Easy
+832|Flipping an Image|flipping-an-image|Easy`),
+
+    P(3, "Sliding Window", 
+    "Maintain a contiguous range while endpoints only move forward. Update state incrementally instead of rescanning.", 
+    "Contiguous; longest/shortest; fixed K; at most K; contains all required characters.", 
+    "Fixed window size → Dynamic expansion (longest valid) → Dynamic contraction (minimum covering) → Monotonic deque window.",
+    "Avoids O(N*K) brute-force scanning by maintaining an incremental running state. Both endpoints move forward monotonically, guaranteeing an amortized O(N) time complexity. Character counts are tracked via primitive frequency arrays to avoid map lookup overhead.",
+    [
+        ["Fixed size", "for right=0 .. n-1:\n  add a[right]\n  if right>=k-1:\n    update answer\n    remove a[right-k+1]"],
+        ["Longest valid", "left=0\nfor right=0 .. n-1:\n  add right\n  while invalid:\n    remove left; left++\n  maximize right-left+1"],
+        ["Minimum covering", "left=0\nfor right=0 .. n-1:\n  add right\n  while valid:\n    minimize right-left+1\n    remove left; left++"]
+    ], 
+    "Shrinking once instead of a while loop; updating at the wrong time; leaving zero counts in a map.", 
+    "Define the window invariant in English and code fixed, longest, minimum, and exactly-K variants.", 
+    `643|Maximum Average Subarray I|maximum-average-subarray-i|Easy
+1876|Substrings of Size Three with Distinct Characters|substrings-of-size-three-with-distinct-characters|Easy
+3|Longest Substring Without Repeating Characters|longest-substring-without-repeating-characters|Medium
+424|Longest Repeating Character Replacement|longest-repeating-character-replacement|Medium
+567|Permutation in String|permutation-in-string|Medium
+438|Find All Anagrams in a String|find-all-anagrams-in-a-string|Medium
+209|Minimum Size Subarray Sum|minimum-size-subarray-sum|Medium
+1004|Max Consecutive Ones III|max-consecutive-ones-iii|Medium
+1456|Maximum Number of Vowels in a Substring of Given Length|maximum-number-of-vowels-in-a-substring-of-given-length|Medium
+1493|Longest Subarray of 1's After Deleting One Element|longest-subarray-of-1s-after-deleting-one-element|Medium
+904|Fruit Into Baskets|fruit-into-baskets|Medium
+1208|Get Equal Substrings Within Budget|get-equal-substrings-within-budget|Medium
+1423|Maximum Points You Can Obtain from Cards|maximum-points-you-can-obtain-from-cards|Medium
+713|Subarray Product Less Than K|subarray-product-less-than-k|Medium
+1695|Maximum Erasure Value|maximum-erasure-value|Medium
+76|Minimum Window Substring|minimum-window-substring|Hard
+239|Sliding Window Maximum|sliding-window-maximum|Hard
+30|Substring with Concatenation of All Words|substring-with-concatenation-of-all-words|Hard
+992|Subarrays with K Different Integers|subarrays-with-k-different-integers|Hard
+1052|Grumpy Bookstore Owner|grumpy-bookstore-owner|Medium
+1343|Number of Sub-arrays of Size K and Average Greater than or Equal to Threshold|number-of-sub-arrays-of-size-k-and-average-greater-than-or-equal-to-threshold|Medium
+1658|Minimum Operations to Reduce X to Zero|minimum-operations-to-reduce-x-to-zero|Medium
+1248|Count Number of Nice Subarrays|count-number-of-nice-subarrays|Medium
+930|Binary Subarrays With Sum|binary-subarrays-with-sum|Medium
+485|Max Consecutive Ones|max-consecutive-ones|Easy`),
+
+    P(4, "Prefix Sum & Difference Array", 
+    "Precompute cumulative information for O(1) range queries. Prefix plus HashMap turns subarray equations into frequency lookups.", 
+    "Repeated range sums/XOR; sum equals K; balance index; rectangle sums.", 
+    "1D prefix → Prefix + HashMap target lookup → 2D prefix table → Difference array for range updates.",
+    "Trades O(N) preprocessing space for O(1) query time. Subarray sum equations: sum(i, j) = prefix[j+1] - prefix[i]. Transforming sum(i, j) == k into prefix[j+1] - k == prefix[i] converts subarray search into instant map frequency lookups. Difference arrays allow O(1) interval increments with single prefix recovery.",
+    [
+        ["1D Prefix", "pref[0]=0\nfor i=0 .. n-1:\n  pref[i+1] = pref[i] + a[i]\nrange(l, r) = pref[r+1] - pref[l]"],
+        ["Prefix + Map (O(n) avg)", "count={0:1}; prefix=0\nfor x in a:\n  prefix += x\n  answer += count[prefix - target]\n  count[prefix]++"],
+        ["Difference Array", "diff[left] += val\nif right+1 < n: diff[right+1] -= val\nfinal_values = prefix(diff)"]
+    ], 
+    "Missing the (0:1) base case in the prefix map; int overflow; off-by-one indices.", 
+    "Derive range subtraction, explain the initial zero prefix, and implement range additions.", 
+    `1480|Running Sum of 1d Array|running-sum-of-1d-array|Easy
+303|Range Sum Query - Immutable|range-sum-query-immutable|Easy
+724|Find Pivot Index|find-pivot-index|Easy
+1991|Find the Middle Index in Array|find-the-middle-index-in-array|Easy
+1732|Find the Highest Altitude|find-the-highest-altitude|Easy
+304|Range Sum Query 2D - Immutable|range-sum-query-2d-immutable|Medium
+560|Subarray Sum Equals K|subarray-sum-equals-k|Medium
+523|Continuous Subarray Sum|continuous-subarray-sum|Medium
+974|Subarray Sums Divisible by K|subarray-sums-divisible-by-k|Medium
+525|Contiguous Array|contiguous-array|Medium
+930|Binary Subarrays With Sum|binary-subarrays-with-sum|Medium
+1248|Count Number of Nice Subarrays|count-number-of-nice-subarrays|Medium
+53|Maximum Subarray|maximum-subarray|Medium
+152|Maximum Product Subarray|maximum-product-subarray|Medium
+918|Maximum Sum Circular Subarray|maximum-sum-circular-subarray|Medium
+1310|XOR Queries of a Subarray|xor-queries-of-a-subarray|Medium
+1109|Corporate Flight Bookings|corporate-flight-bookings|Medium
+1094|Car Pooling|car-pooling|Medium
+1685|Sum of Absolute Differences in a Sorted Array|sum-of-absolute-differences-in-a-sorted-array|Medium
+1177|Can Make Palindrome from Substring|can-make-palindrome-from-substring|Medium
+1854|Maximum Population Year|maximum-population-year|Easy
+238|Product of Array Except Self|product-of-array-except-self|Medium
+325|Maximum Size Subarray Sum Equals k|maximum-size-subarray-sum-equals-k|Medium
+370|Range Addition|range-addition|Medium
+1074|Number of Submatrices That Sum to Target|number-of-submatrices-that-sum-to-target|Hard`),
+
+    P(5, "Binary Search", 
+    "Discard half of a monotonic search space per step. Search sorted positions or search the answer using a feasible predicate.", 
+    "Sorted data; first/last valid; O(log n) requirement; minimum speed/capacity.", 
+    "Exact value lookup → First/last occurrence bounds → Rotated sorted search → Monotonic answer space (binary search on answer).",
+    "Reduces candidate space by half at each step over monotonic predicates. Always prevent midpoint overflow in Java using lo + (hi - lo) / 2. In answer-space binary search, identify a boolean monotonic function f(k) and locate the boundary condition between true and false.",
+    [
+        ["Exact value", "lo=0; hi=n-1\nwhile lo<=hi:\n  mid=lo+(hi-lo)/2\n  if a[mid]==target: return mid\n  if a[mid]<target: lo=mid+1\n  else: hi=mid-1"],
+        ["First true / Lower bound", "lo=0; hi=n\nwhile lo<hi:\n  mid=lo+(hi-lo)/2\n  if valid(mid): hi=mid\n  else: lo=mid+1\nreturn lo"]
+    ], 
+    "Midpoint overflow; infinite loops (lo=mid without +1); inconsistent inclusive/exclusive template bounds.", 
+    "Write exact and lower-bound templates blind and prove the answer predicate is monotonic.", 
+    `704|Binary Search|binary-search|Easy
+35|Search Insert Position|search-insert-position|Easy
+278|First Bad Version|first-bad-version|Easy
+374|Guess Number Higher or Lower|guess-number-higher-or-lower|Easy
+367|Valid Perfect Square|valid-perfect-square|Easy
+34|Find First and Last Position of Element in Sorted Array|find-first-and-last-position-of-element-in-sorted-array|Medium
+33|Search in Rotated Sorted Array|search-in-rotated-sorted-array|Medium
+81|Search in Rotated Sorted Array II|search-in-rotated-sorted-array-ii|Medium
+153|Find Minimum in Rotated Sorted Array|find-minimum-in-rotated-sorted-array|Medium
+154|Find Minimum in Rotated Sorted Array II|find-minimum-in-rotated-sorted-array-ii|Hard
+162|Find Peak Element|find-peak-element|Medium
+852|Peak Index in a Mountain Array|peak-index-in-a-mountain-array|Medium
+74|Search a 2D Matrix|search-a-2d-matrix|Medium
+240|Search a 2D Matrix II|search-a-2d-matrix-ii|Medium
+658|Find K Closest Elements|find-k-closest-elements|Medium
+875|Koko Eating Bananas|koko-eating-bananas|Medium
+1011|Capacity To Ship Packages Within D Days|capacity-to-ship-packages-within-d-days|Medium
+1482|Minimum Number of Days to Make m Bouquets|minimum-number-of-days-to-make-m-bouquets|Medium
+410|Split Array Largest Sum|split-array-largest-sum|Hard
+4|Median of Two Sorted Arrays|median-of-two-sorted-arrays|Hard
+69|Sqrt(x)|sqrtx|Easy
+540|Single Element in a Sorted Array|single-element-in-a-sorted-array|Medium
+1283|Find the Smallest Divisor Given a Threshold|find-the-smallest-divisor-given-a-threshold|Medium
+1870|Minimum Speed to Arrive on Time|minimum-speed-to-arrive-on-time|Medium
+719|Find K-th Smallest Pair Distance|find-k-th-smallest-pair-distance|Hard`),
+
+    P(6, "Sorting & Intervals", 
+    "Sorting exposes order; after O(n log n) preprocessing, pairs, grouping, schedules, and intervals often become one linear scan.", 
+    "Overlap; schedule; custom priority; ordering removes ambiguity.", 
+    "Custom comparator → Interval merge → Interval insertion → Non-overlapping intervals → Interval sweep line.",
+    "Sorting establishes order (O(N log N)), collapsing higher-dimensional search spaces into single-pass linear scans. When implementing Java Comparators, never subtract integers directly ((a, b) -> a - b) due to risk of underflow; always use Integer.compare(a, b).",
+    [
+        ["Merge intervals", "sort by start\ncurrent = first\nfor next in rest:\n  if next.start <= current.end:\n    current.end = max(current.end, next.end)\n  else: output current; current = next"],
+        ["Safe comparator", "Arrays.sort(items, (x, y) -> Integer.compare(x.start, y.start));"]
+    ], 
+    "Comparator subtraction overflow (x-y); touching vs overlap semantics; mutating input arrays.", 
+    "Code merge, intersection, and scheduling; explain why sorting changes the problem.", 
+    `1122|Relative Sort Array|relative-sort-array|Easy
+1710|Maximum Units on a Truck|maximum-units-on-a-truck|Easy
+912|Sort an Array|sort-an-array|Medium
+56|Merge Intervals|merge-intervals|Medium
+57|Insert Interval|insert-interval|Medium
+435|Non-overlapping Intervals|non-overlapping-intervals|Medium
+452|Minimum Number of Arrows to Burst Balloons|minimum-number-of-arrows-to-burst-balloons|Medium
+986|Interval List Intersections|interval-list-intersections|Medium
+1288|Remove Covered Intervals|remove-covered-intervals|Medium
+763|Partition Labels|partition-labels|Medium
+1024|Video Stitching|video-stitching|Medium
+646|Maximum Length of Pair Chain|maximum-length-of-pair-chain|Medium
+729|My Calendar I|my-calendar-i|Medium
+1029|Two City Scheduling|two-city-scheduling|Medium
+179|Largest Number|largest-number|Medium
+148|Sort List|sort-list|Medium
+969|Pancake Sorting|pancake-sorting|Medium
+274|H-Index|h-index|Medium
+406|Queue Reconstruction by Height|queue-reconstruction-by-height|Medium
+218|The Skyline Problem|the-skyline-problem|Hard
+252|Meeting Rooms|meeting-rooms|Easy
+253|Meeting Rooms II|meeting-rooms-ii|Medium
+135|Candy|candy|Hard
+493|Reverse Pairs|reverse-pairs|Hard
+315|Count of Smaller Numbers After Self|count-of-smaller-numbers-after-self|Hard`),
+
+    P(7, "Linked List & Fast/Slow", 
+    "Reference manipulation without random access. Dummy nodes remove head edge cases; fast/slow pointers create gaps and detect cycles.", 
+    "Reverse/reorder; node identity; cycle; nth from end; O(1) extra memory.", 
+    "Reversal → Fast & slow pointers → Dummy node management → Interleaving/reordering → Deep cloning.",
+    "Linked Lists lack spatial locality; pointers introduce frequent CPU cache misses. Using dummy sentinels eliminates branch checks for empty lists or head modifications. Floyd’s Cycle Detection algorithm operates in O(N) time with O(1) memory by relying on speed ratios.",
+    [
+        ["Iterative reverse", "prev=null; curr=head\nwhile curr!=null:\n  next=curr.next\n  curr.next=prev\n  prev=curr; curr=next\nreturn prev"],
+        ["Dummy node", "dummy=new Node(); dummy.next=head\nprev=dummy\nwhile prev.next!=null: inspect(prev.next)\nreturn dummy.next"],
+        ["Floyd cycle", "slow=head; fast=head\nwhile fast!=null and fast.next!=null:\n  slow=slow.next; fast=fast.next.next\n  if slow==fast: cycle"]
+    ], 
+    "Losing next reference during updates; comparing values instead of node identity; recursive stack overflow.", 
+    "Reverse, dummy-delete, fixed gap, Floyd, and reorder without losing references.", 
+    `206|Reverse Linked List|reverse-linked-list|Easy
+21|Merge Two Sorted Lists|merge-two-sorted-lists|Easy
+83|Remove Duplicates from Sorted List|remove-duplicates-from-sorted-list|Easy
+203|Remove Linked List Elements|remove-linked-list-elements|Easy
+876|Middle of the Linked List|middle-of-the-linked-list|Easy
+141|Linked List Cycle|linked-list-cycle|Easy
+160|Intersection of Two Linked Lists|intersection-of-two-linked-lists|Easy
+234|Palindrome Linked List|palindrome-linked-list|Easy
+82|Remove Duplicates from Sorted List II|remove-duplicates-from-sorted-list-ii|Medium
+19|Remove Nth Node From End of List|remove-nth-node-from-end-of-list|Medium
+142|Linked List Cycle II|linked-list-cycle-ii|Medium
+143|Reorder List|reorder-list|Medium
+92|Reverse Linked List II|reverse-linked-list-ii|Medium
+24|Swap Nodes in Pairs|swap-nodes-in-pairs|Medium
+2|Add Two Numbers|add-two-numbers|Medium
+445|Add Two Numbers II|add-two-numbers-ii|Medium
+138|Copy List with Random Pointer|copy-list-with-random-pointer|Medium
+61|Rotate List|rotate-list|Medium
+146|LRU Cache|lru-cache|Medium
+25|Reverse Nodes in k-Group|reverse-nodes-in-k-group|Hard
+23|Merge k Sorted Lists|merge-k-sorted-lists|Hard
+725|Split Linked List in Parts|split-linked-list-in-parts|Medium
+328|Odd Even Linked List|odd-even-linked-list|Medium
+86|Partition List|partition-list|Medium
+430|Flatten a Multilevel Doubly Linked List|flatten-a-multilevel-doubly-linked-list|Medium`),
+
+    P(8, "Stack & Monotonic Stack", 
+    "Stacks handle nesting and reversed dependencies. Monotonic stacks/deques discard candidates that can never become useful again.", 
+    "Brackets; undo; nearest greater/smaller; histogram; expression evaluation.", 
+    "Bracket/token evaluation → Expression parsing → Monotonic increasing/decreasing stacks → Largest rectangular bounds.",
+    "Legacy java.util.Stack extends Vector and carries synchronized locking penalties. Use java.util.ArrayDeque for single-threaded LIFO operations. Monotonic stacks maintain sortedness by eagerly pruning elements that are suboptimal, ensuring each element is pushed and popped at most once (amortized O(N)).",
+    [
+        ["Matching", "for token in stream:\n  if opener: push\n  if closer: pop and validate"],
+        ["Next greater", "for i in 0 .. n-1:\n  while !stack.empty and a[i] > a[stack.top]:\n    answer[stack.pop] = a[i]\n  stack.push(i)"]
+    ], 
+    "Using Stack class instead of ArrayDeque; popping an empty stack; wrong strictly-greater vs greater-equal logic.", 
+    "Explain the monotonic invariant and solve Daily Temperatures plus Histogram blind.", 
+    `20|Valid Parentheses|valid-parentheses|Easy
+232|Implement Queue using Stacks|implement-queue-using-stacks|Easy
+225|Implement Stack using Queues|implement-stack-using-queues|Easy
+682|Baseball Game|baseball-game|Easy
+1047|Remove All Adjacent Duplicates In String|remove-all-adjacent-duplicates-in-string|Easy
+496|Next Greater Element I|next-greater-element-i|Easy
+155|Min Stack|min-stack|Medium
+150|Evaluate Reverse Polish Notation|evaluate-reverse-polish-notation|Medium
+1249|Minimum Remove to Make Valid Parentheses|minimum-remove-to-make-valid-parentheses|Medium
+921|Minimum Add to Make Parentheses Valid|minimum-add-to-make-parentheses-valid|Medium
+71|Simplify Path|simplify-path|Medium
+394|Decode String|decode-string|Medium
+739|Daily Temperatures|daily-temperatures|Medium
+503|Next Greater Element II|next-greater-element-ii|Medium
+901|Online Stock Span|online-stock-span|Medium
+402|Remove K Digits|remove-k-digits|Medium
+316|Remove Duplicate Letters|remove-duplicate-letters|Medium
+84|Largest Rectangle in Histogram|largest-rectangle-in-histogram|Hard
+85|Maximal Rectangle|maximal-rectangle|Hard
+32|Longest Valid Parentheses|longest-valid-parentheses|Hard
+735|Asteroid Collision|asteroid-collision|Medium
+856|Score of Parentheses|score-of-parentheses|Medium
+946|Validate Stack Sequences|validate-stack-sequences|Medium
+456|132 Pattern|132-pattern|Medium
+1019|Next Greater Node In Linked List|next-greater-node-in-linked-list|Medium`),
+
+    P(9, "Recursion & Backtracking", 
+    "Recursion solves smaller states; backtracking explores decisions depth-first and undoes each choice.", 
+    "Generate combinations/permutations; choose/skip; board search; partitioning; reversible choices.", 
+    "State shrink & base conditions → Subsets (power set) → Permutations → Constraint pruning → Grid/board search.",
+    "Java does not perform tail-call elimination; deeply nested recursion risks StackOverflowError when call depth reaches ~10,000 frames. Backtracking modifies state in-place, recurses, and reverts changes (undo). Defensive deep copies of accumulation collections (new ArrayList<>(path)) must only occur at terminal base conditions.",
+    [
+        ["Recursive skeleton", "solve(state):\n  if base: return base_val\n  return combine(solve(state_1), ...)"],
+        ["Grid backtracking", "dfs(r, c):\n  if invalid/visited: fail\n  mark visited\n  try every direction\n  unmark visited (if needed)"]
+    ], 
+    "Java has no Tail Call Optimization; saving the same path object instead of copying; forgetting to undo changes.", 
+    "Draw recursion trees and implement subsets, permutations, combinations, and board search correctly.", 
+    `509|Fibonacci Number|fibonacci-number|Easy
+50|Pow(x, n)|powx-n|Medium
+78|Subsets|subsets|Medium
+90|Subsets II|subsets-ii|Medium
+46|Permutations|permutations|Medium
+47|Permutations II|permutations-ii|Medium
+77|Combinations|combinations|Medium
+39|Combination Sum|combination-sum|Medium
+40|Combination Sum II|combination-sum-ii|Medium
+216|Combination Sum III|combination-sum-iii|Medium
+17|Letter Combinations of a Phone Number|letter-combinations-of-a-phone-number|Medium
+22|Generate Parentheses|generate-parentheses|Medium
+784|Letter Case Permutation|letter-case-permutation|Medium
+79|Word Search|word-search|Medium
+131|Palindrome Partitioning|palindrome-partitioning|Medium
+93|Restore IP Addresses|restore-ip-addresses|Medium
+698|Partition to K Equal Sum Subsets|partition-to-k-equal-sum-subsets|Medium
+51|N-Queens|n-queens|Hard
+52|N-Queens II|n-queens-ii|Hard
+37|Sudoku Solver|sudoku-solver|Hard
+140|Word Break II|word-break-ii|Hard
+491|Non-decreasing Subsequences|non-decreasing-subsequences|Medium
+257|Binary Tree Paths|binary-tree-paths|Easy
+797|All Paths From Source to Target|all-paths-from-source-to-target|Medium
+282|Expression Add Operators|expression-add-operators|Hard`),
+
+    P(10, "Trees & BST", 
+    "Tree DFS combines child results; BFS handles levels. Binary search trees add ordering that supports directed search.", 
+    "Subtree; ancestor; hierarchy; path; depth/height; level; ordered binary tree.", 
+    "Recursive traversals (pre/in/post) → Level-order BFS → Path sums & diameters → BST properties → LCA.",
+    "Trees are recursive structures where parent decisions aggregate child subproblem solutions. In a Binary Search Tree (BST), inorder traversal produces strictly monotonically non-decreasing order. Validating a BST must strictly enforce global range bounds (min, max) down recursive call stacks rather than local immediate parent-child comparisons.",
+    [
+        ["DFS return value", "dfs(node):\n  if node==null: return base\n  left=dfs(node.left)\n  right=dfs(node.right)\n  return combine(left, right)"],
+        ["Level BFS", "queue.offer(root)\nwhile !queue.isEmpty:\n  size=queue.size\n  repeat size times:\n    node=queue.poll; enqueue children"],
+        ["Validate BST", "valid(node, low, high):\n  if node==null: return true\n  if val<=low or val>=high: return false\n  return valid(left, low, val) and valid(right, val, high)"]
+    ], 
+    "Skewed recursion stack overflow; local-only BST checks; changing queue size while processing a level.", 
+    "Write recursive/iterative traversals, BFS, BST bounds, and LCA.", 
+    `94|Binary Tree Inorder Traversal|binary-tree-inorder-traversal|Easy
+144|Binary Tree Preorder Traversal|binary-tree-preorder-traversal|Easy
+145|Binary Tree Postorder Traversal|binary-tree-postorder-traversal|Easy
+104|Maximum Depth of Binary Tree|maximum-depth-of-binary-tree|Easy
+111|Minimum Depth of Binary Tree|minimum-depth-of-binary-tree|Easy
+100|Same Tree|same-tree|Easy
+101|Symmetric Tree|symmetric-tree|Easy
+226|Invert Binary Tree|invert-binary-tree|Easy
+110|Balanced Binary Tree|balanced-binary-tree|Easy
+543|Diameter of Binary Tree|diameter-of-binary-tree|Easy
+112|Path Sum|path-sum|Easy
+700|Search in a Binary Search Tree|search-in-a-binary-search-tree|Easy
+102|Binary Tree Level Order Traversal|binary-tree-level-order-traversal|Medium
+113|Path Sum II|path-sum-ii|Medium
+236|Lowest Common Ancestor of a Binary Tree|lowest-common-ancestor-of-a-binary-tree|Medium
+235|Lowest Common Ancestor of a Binary Search Tree|lowest-common-ancestor-of-a-binary-search-tree|Medium
+98|Validate Binary Search Tree|validate-binary-search-tree|Medium
+230|Kth Smallest Element in a BST|kth-smallest-element-in-a-bst|Medium
+701|Insert into a Binary Search Tree|insert-into-a-binary-search-tree|Medium
+124|Binary Tree Maximum Path Sum|binary-tree-maximum-path-sum|Hard
+105|Construct Binary Tree from Preorder and Inorder Traversal|construct-binary-tree-from-preorder-and-inorder-traversal|Medium
+106|Construct Binary Tree from Inorder and Postorder Traversal|construct-binary-tree-from-inorder-and-postorder-traversal|Medium
+199|Binary Tree Right Side View|binary-tree-right-side-view|Medium
+297|Serialize and Deserialize Binary Tree|serialize-and-deserialize-binary-tree|Hard
+114|Flatten Binary Tree to Linked List|flatten-binary-tree-to-linked-list|Medium`),
+
+    P(11, "Heap & Top-K", 
+    "A heap exposes the smallest/largest active candidate without full sorting. Java PriorityQueue is a min-heap.", 
+    "Top K; kth; repeatedly choose best; merge streams; running median; scheduling.", 
+    "Min-heap vs Max-heap mechanics → Top-K elements → Streaming continuous median → K-way array merging.",
+    "Java PriorityQueue implements a binary heap on a dynamic array backing. Default behavior is a min-heap; accessing .peek() is O(1) and .poll() / .offer() take O(log N). To retain Top-K largest elements, invert intuition by keeping a min-heap of size K: any element smaller than root is discarded, maintaining the K largest elements in O(N log K).",
+    [
+        ["Top K largest", "for x in input:\n  heap.offer(x)\n  if heap.size() > k: heap.poll()\n// heap contains k largest"],
+        ["Merge K streams", "offer first item from each source\nwhile heap not empty:\n  item=poll\n  output\n  offer its successor if present"]
+    ], 
+    "Stale entries; no decrease-key method in Java; priority queue iteration is not sorted.", 
+    "Implement top-k, merge-K, two-heaps median, and explain PQ operation costs.", 
+    `703|Kth Largest Element in a Stream|kth-largest-element-in-a-stream|Easy
+1046|Last Stone Weight|last-stone-weight|Easy
+215|Kth Largest Element in an Array|kth-largest-element-in-an-array|Medium
+347|Top K Frequent Elements|top-k-frequent-elements|Medium
+692|Top K Frequent Words|top-k-frequent-words|Medium
+973|K Closest Points to Origin|k-closest-points-to-origin|Medium
+451|Sort Characters By Frequency|sort-characters-by-frequency|Medium
+621|Task Scheduler|task-scheduler|Medium
+767|Reorganize String|reorganize-string|Medium
+355|Design Twitter|design-twitter|Medium
+378|Kth Smallest Element in a Sorted Matrix|kth-smallest-element-in-a-sorted-matrix|Medium
+373|Find K Pairs with Smallest Sums|find-k-pairs-with-smallest-sums|Medium
+264|Ugly Number II|ugly-number-ii|Medium
+1481|Least Number of Unique Integers after K Removals|least-number-of-unique-integers-after-k-removals|Medium
+1338|Reduce Array Size to The Half|reduce-array-size-to-the-half|Medium
+1962|Remove Stones to Minimize the Total|remove-stones-to-minimize-the-total|Medium
+1834|Single-Threaded CPU|single-threaded-cpu|Medium
+23|Merge k Sorted Lists|merge-k-sorted-lists|Hard
+295|Find Median from Data Stream|find-median-from-data-stream|Hard
+502|IPO|ipo|Hard
+253|Meeting Rooms II|meeting-rooms-ii|Medium
+1642|Furthest Building You Can Reach|furthest-building-you-can-reach|Medium
+759|Employee Free Time|employee-free-time|Hard
+871|Minimum Number of Refueling Stops|minimum-number-of-refueling-stops|Hard
+632|Smallest Range Covering Elements from K Lists|smallest-range-covering-elements-from-k-lists|Hard`),
+
+    P(12, "Graph BFS & DFS", 
+    "Graphs model relationships. DFS explores components/structure; BFS explores distance layers and gives shortest paths in unweighted graphs.", 
+    "Connectivity; islands; paths; transformations by steps; components; neighbors.", 
+    "Matrix flood-fill → Connected component discovery → Multi-source BFS layer expansion → Cycle detection in directed/undirected graphs.",
+    "BFS guarantees shortest path in unweighted graphs by expanding uniform edge-length wave frontiers. DFS exhausts path branches before backtracking. Crucial: Nodes MUST be flagged as visited immediately upon being pushed/offered to the BFS queue, not when polled, to prevent exponential duplicate queue insertions.",
+    [
+        ["Graph DFS", "dfs(node):\n  if visited[node]: return\n  visited[node]=true\n  for next in graph[node]: dfs(next)"],
+        ["Unweighted BFS", "queue.offer(start); mark start\nwhile !queue.isEmpty:\n  node=poll\n  for unvisited neighbor:\n    mark; offer"]
+    ], 
+    "Marking visited after dequeue causes deep recursive overflow; swapped row/column bounds; reusing visited incorrectly.", 
+    "Choose BFS versus DFS, traverse disconnected graphs, and solve grid and multi-source BFS.", 
+    `733|Flood Fill|flood-fill|Easy
+463|Island Perimeter|island-perimeter|Easy
+1971|Find if Path Exists in Graph|find-if-path-exists-in-graph|Easy
+200|Number of Islands|number-of-islands|Medium
+695|Max Area of Island|max-area-of-island|Medium
+130|Surrounded Regions|surrounded-regions|Medium
+994|Rotting Oranges|rotting-oranges|Medium
+542|01 Matrix|01-matrix|Medium
+1091|Shortest Path in Binary Matrix|shortest-path-in-binary-matrix|Medium
+417|Pacific Atlantic Water Flow|pacific-atlantic-water-flow|Medium
+133|Clone Graph|clone-graph|Medium
+797|All Paths From Source to Target|all-paths-from-source-to-target|Medium
+841|Keys and Rooms|keys-and-rooms|Medium
+785|Is Graph Bipartite?|is-graph-bipartite|Medium
+886|Possible Bipartition|possible-bipartition|Medium
+752|Open the Lock|open-the-lock|Medium
+1129|Shortest Path with Alternating Colors|shortest-path-with-alternating-colors|Medium
+1020|Number of Enclaves|number-of-enclaves|Medium
+1254|Number of Closed Islands|number-of-closed-islands|Medium
+127|Word Ladder|word-ladder|Hard
+207|Course Schedule|course-schedule|Medium
+210|Course Schedule II|course-schedule-ii|Medium
+310|Minimum Height Trees|minimum-height-trees|Medium
+802|Find Eventual Safe States|find-eventual-safe-states|Medium
+126|Word Ladder II|word-ladder-ii|Hard`),
+
+    P(13, "Advanced Graph", 
+    "Topological sort orders dependencies; Union-Find maintains dynamic components; shortest-path algorithms optimize weighted routes.", 
+    "Prerequisites; redundant edge; union connectivity; weighted minimum path; probability/effort route.", 
+    "Kahn’s topological sort → Disjoint Set Union (DSU with rank & path compression) → Dijkstra’s algorithm → Bellman-Ford/MST.",
+    "Topological sorting computes partial orders on Directed Acyclic Graphs (DAGs); indegree-0 queueing unrolls dependencies. DSU with path compression and union-by-rank achieves amortized inverse Ackermann function time O(α(N)) ≈ O(1). Dijkstra’s algorithm uses non-negative edge weights to eagerly greedy-relax distance states.",
+    [
+        ["Kahn topological sort", "queue all indegree=0 nodes\nwhile queue not empty:\n  u=poll; output u\n  decrement neighbor indegrees\n  if 0: offer"],
+        ["Union-Find", "find(x):\n  if parent[x]!=x: parent[x]=find(parent[x])\n  return parent[x]\nunion roots by size/rank"],
+        ["Dijkstra", "offer(0, start)\nwhile heap not empty:\n  (d, u)=poll\n  if d!=dist[u]: continue\n  for edge: relax and offer"]
+    ], 
+    "Bounded Bellman-Ford node limitations; Dijkstra state assumptions with negative edges.", 
+    "Code Kahn, color DFS, DSU, and Dijkstra and state the valid input assumptions.", 
+    `207|Course Schedule|course-schedule|Medium
+210|Course Schedule II|course-schedule-ii|Medium
+310|Minimum Height Trees|minimum-height-trees|Medium
+802|Find Eventual Safe States|find-eventual-safe-states|Medium
+1462|Course Schedule IV|course-schedule-iv|Medium
+2115|Find All Possible Recipes from Given Supplies|find-all-possible-recipes-from-given-supplies|Medium
+547|Number of Provinces|number-of-provinces|Medium
+684|Redundant Connection|redundant-connection|Medium
+990|Satisfiability of Equality Equations|satisfiability-of-equality-equations|Medium
+721|Accounts Merge|accounts-merge|Medium
+1319|Number of Operations to Make Network Connected|number-of-operations-to-make-network-connected|Medium
+947|Most Stones Removed with Same Row or Column|most-stones-removed-with-same-row-or-column|Medium
+1584|Min Cost to Connect All Points|min-cost-to-connect-all-points|Medium
+743|Network Delay Time|network-delay-time|Medium
+787|Cheapest Flights Within K Stops|cheapest-flights-within-k-stops|Medium
+1631|Path With Minimum Effort|path-with-minimum-effort|Medium
+1514|Path with Maximum Probability|path-with-maximum-probability|Medium
+685|Redundant Connection II|redundant-connection-ii|Hard
+839|Similar String Groups|similar-string-groups|Hard
+778|Swim in Rising Water|swim-in-rising-water|Hard
+1192|Critical Connections in a Network|critical-connections-in-a-network|Hard
+1202|Smallest String With Swaps|smallest-string-with-swaps|Medium
+1976|Number of Ways to Arrive at Destination|number-of-ways-to-arrive-at-destination|Medium
+269|Alien Dictionary|alien-dictionary|Hard
+847|Shortest Path Visiting All Nodes|shortest-path-visiting-all-nodes|Hard`),
+
+    P(14, "Greedy", 
+    "Commit to the best local choice only when an exchange argument or invariant shows the choice cannot hurt the global optimum.", 
+    "Ordering; interval selection; reachability frontier; allocate scarce resources; one-pass best-so-far.", 
+    "One-pass optimal boundary → Activity selection / sorting → Reachability jumps → Gas circular tours → Resource allocation.",
+    "Greedy algorithms commit to the best local choice without reconsideration. A greedy solution is only provably correct if the problem displays the Greedy-Choice Property and Optimal Substructure. Proving correctness requires an exchange argument demonstrating that swapping any choice with the greedy choice leaves the solution at least as optimal.",
+    [
+        ["Running best", "bestSoFar = initial\nfor x in input:\n  update current state\n  update bestSoFar"],
+        ["Reachability frontier", "farthest=0\nfor i while i<=farthest:\n  farthest=max(farthest, i+jump[i])\nreturn farthest>=target"]
+    ], 
+    "Greedy without proof; hidden counterexamples where dynamic programming was required.", 
+    "Give an exchange argument or a counterexample before claiming a greedy solution.", 
+    `121|Best Time to Buy and Sell Stock|best-time-to-buy-and-sell-stock|Easy
+455|Assign Cookies|assign-cookies|Easy
+860|Lemonade Change|lemonade-change|Easy
+605|Can Place Flowers|can-place-flowers|Easy
+1005|Maximize Sum Of Array After K Negations|maximize-sum-of-array-after-k-negations|Easy
+55|Jump Game|jump-game|Medium
+45|Jump Game II|jump-game-ii|Medium
+122|Best Time to Buy and Sell Stock II|best-time-to-buy-and-sell-stock-ii|Medium
+134|Gas Station|gas-station|Medium
+678|Valid Parenthesis String|valid-parenthesis-string|Medium
+12|Integer to Roman|integer-to-roman|Medium
+376|Wiggle Subsequence|wiggle-subsequence|Medium
+738|Monotone Increasing Digits|monotone-increasing-digits|Medium
+1846|Maximum Element After Decreasing and Rearranging|maximum-element-after-decreasing-and-rearranging|Medium
+1642|Furthest Building You Can Reach|furthest-building-you-can-reach|Medium
+991|Broken Calculator|broken-calculator|Medium
+135|Candy|candy|Hard
+968|Binary Tree Cameras|binary-tree-cameras|Hard
+630|Course Schedule III|course-schedule-iii|Hard
+330|Patching Array|patching-array|Hard
+763|Partition Labels|partition-labels|Medium
+435|Non-overlapping Intervals|non-overlapping-intervals|Medium
+452|Minimum Number of Arrows to Burst Balloons|minimum-number-of-arrows-to-burst-balloons|Medium
+846|Hand of Straights|hand-of-straights|Medium
+881|Boats to Save People|boats-to-save-people|Medium`),
+
+    P(15, "Dynamic Programming", 
+    "Store overlapping subproblem results. Begin with recursive state and recurrence; memoize; then derive bottom-up order and optional space optimization.", 
+    "Count ways; min/max choices; take/skip; partition; subsequence; grid paths; repeated states.", 
+    "1D recurrence & memoization → Iterative bottom-up space optimization → 2D grids & subsequences → Knapsack (0/1 and unbounded) → Interval DP.",
+    "Dynamic programming transforms exponential recursive branch trees into polynomial running times by storing subproblem answers. Every DP requires: (1) State Definition, (2) Base Cases, (3) Recurrence Relation, and (4) Computation Order. When previous subproblem states depend only on the immediate prior row or index, space can be compressed from O(N*M) to O(M).",
+    [
+        ["Memoization", "solve(state):\n  if base: return base\n  if memoized: return memo\n  answer = best choice\n  return memo[state]=answer"],
+        ["Grid DP", "for cells in dependency order:\n  dp[r][c] = grid[r][c] + best(dp[r-1][c], dp[r][c-1])"],
+        ["1D take/skip", "for i=0 .. n-1:\n  dp[i] = best(dp[i-1], val + dp[compatibleIndex])"]
+    ], 
+    "Table before defining state; wrong 0/1 loop direction; sentinel overflow; giant state dimensions.", 
+    "Derive recursion -> memo -> table for one 1D and one 2D problem and explain iteration order.", 
+    `70|Climbing Stairs|climbing-stairs|Easy
+746|Min Cost Climbing Stairs|min-cost-climbing-stairs|Easy
+198|House Robber|house-robber|Medium
+213|House Robber II|house-robber-ii|Medium
+337|House Robber III|house-robber-iii|Medium
+322|Coin Change|coin-change|Medium
+518|Coin Change II|coin-change-ii|Medium
+279|Perfect Squares|perfect-squares|Medium
+139|Word Break|word-break|Medium
+300|Longest Increasing Subsequence|longest-increasing-subsequence|Medium
+1143|Longest Common Subsequence|longest-common-subsequence|Medium
+72|Edit Distance|edit-distance|Medium
+5|Longest Palindromic Substring|longest-palindromic-substring|Medium
+647|Palindromic Substrings|palindromic-substrings|Medium
+416|Partition Equal Subset Sum|partition-equal-subset-sum|Medium
+494|Target Sum|target-sum|Medium
+62|Unique Paths|unique-paths|Medium
+63|Unique Paths II|unique-paths-ii|Medium
+64|Minimum Path Sum|minimum-path-sum|Medium
+10|Regular Expression Matching|regular-expression-matching|Hard
+44|Wildcard Matching|wildcard-matching|Hard
+312|Burst Balloons|burst-balloons|Hard
+115|Distinct Subsequences|distinct-subsequences|Hard
+714|Best Time to Buy and Sell Stock with Transaction Fee|best-time-to-buy-and-sell-stock-with-transaction-fee|Medium
+309|Best Time to Buy and Sell Stock with Cooldown|best-time-to-buy-and-sell-stock-with-cooldown|Medium`)
+];
+
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"}[c]));
+const KEY = "dsaPatternProgressv4";
+const solved = new Set(JSON.parse(localStorage.getItem(KEY) || "[]"));
+let current = "home", filter = "All";
+
+function save() { localStorage.setItem(KEY, JSON.stringify([...solved])); updateOverall(); }
+
+function updateOverall() {
+    const total = patterns.reduce((n, p) => n + p.problems.length, 0);
+    $("#overallText").textContent = `${solved.size} / ${total} solved`;
+    $("#overallBar").style.width = `${(solved.size / total) * 100}%`;
+    document.querySelectorAll(".tab").forEach((b) => {
+        if(b.dataset.go === "home") return;
+        const p = patterns[b.dataset.go]; 
+        if(p) b.querySelector("small").textContent = `${p.problems.filter(x => solved.has(x.id)).length}/${p.problems.length}`;
+    });
+}
+
+function renderNav() {
+    $("#nav").innerHTML = patterns.map(p => `<button class="tab" data-go="${p.number}"><span class="n">${p.number}</span><span>${esc(p.title)}</span><small>0/25</small></button>`).join("");
+    updateOverall();
+}
+
+function Landing() {
+    current = "home"; location.hash = "home"; filter = "All";
+    $("#page").innerHTML = `
+    <section class="hero"><div class="eyebrow">Pattern-first · Java 17/21</div><h1>Learn the patterns.<br>Stop memorizing answers.</h1>
+    <p>A guided path from brute force to dynamic programming, with scenario pseudocode and deep architectural Java insights.</p>
+    <div class="hero-stats"><div><b>16</b><span>essential patterns</span></div><div><b>400</b><span>curated problems</span></div><div><b>25</b><span>per pattern</span></div><div><b>24-32</b><span>weeks</span></div></div></section>
+    <h2>What DSA is—and what interviews actually test</h2><p class="lead">Data structures organize data; algorithms search and transform it. Product-company interviews repeatedly test a finite family of reusable patterns. Your job is to recognize the search space, state brute force, find repeated work, choose the matching structure, and communicate correctness and complexity.</p>
+    <div class="grid">
+    <div class="card"><h3>Why brute force comes first</h3><p>It proves understanding, gives a correct baseline, and reveals the bottleneck. Never hide it—state it, cost it, then improve it.</p></div>
+    <div class="card"><h3>The interview loop</h3><p>Clarify → example → brute force → bottleneck → optimized pattern → code → dry run → time and extra space.</p></div>
+    <div class="card"><h3>What mastery means</h3><p>Recognize a pattern, write its scenario templates, solve 14/25 listed problems, then pass two unseen mediums in 40 minutes.</p></div>
+    </div>
+    <h2>How to study every tab</h2>
+    <div class="step"><b>1</b><div>Read the brief, recognition signals, and theoretical internals.</div></div>
+    <div class="step"><b>2</b><div>Trace every scenario on tiny input.</div></div>
+    <div class="step"><b>3</b><div>Type the pseudocode as Java blind.</div></div>
+    <div class="step"><b>4</b><div>Problems 1-10: learn; hints allowed.</div></div>
+    <div class="step"><b>5</b><div>Problems 11-20: 40-minute limit.</div></div>
+    <div class="step"><b>6</b><div>Problems 21-25: mixed and timed under interview conditions.</div></div>
+    <h2>Spaced repetition</h2><div class="card"><p><b>Day 1:</b> learn + 2 easy &nbsp; <b>Day 2:</b> 2 problems &nbsp; <b>Day 4:</b> 2 problems &nbsp; <b>Day 7:</b> 3 &nbsp; <b>Day 14:</b> 3 &nbsp; <b>Day 30:</b> redo two failures without notes.</p><p>Keep an error log: recognition, invariant, off-by-one/null, Java API, overflow, complexity, implementation, or missing edge test.</p></div>
+    <h2>Ordered learning path</h2><div class="path">${patterns.map(p => `<button data-go="${p.number}"><span>Pattern ${p.number}</span><strong>${esc(p.title)}</strong></button>`).join("")}</div>
+    <h2>Java rules that prevent common failures</h2>
+    <div class="grid">
+    <div class="card"><h3>Numeric safety</h3><p>Use <code>long</code> for large sums; midpoint is <code>lo+(hi-lo)/2</code>; comparator uses <code>Integer.compare</code> to prevent overflow bugs.</p></div>
+    <div class="card"><h3>Collections</h3><p>Use <code>ArrayDeque</code>, not legacy <code>Stack</code>. Hash keys must be immutable and stable. PriorityQueue iteration is inherently not sorted.</p></div>
+    <div class="card"><h3>Recursion</h3><p>Java has no tail-call optimization. Copy backtracking state objects (like Lists) and expect deep recursion to trigger StackOverflowError.</p></div>
+    </div>
+    <div class="footer">This is the job interview core. Segment trees, max flow, suffix automata, and advanced geometry are intentionally excluded.</div>`;
+    activateNav(); window.scrollTo(0, 0);
+}
+
+function patternPage(index) {
+    const p = patterns[index]; current = String(index); location.hash = `pattern-${index}`; filter = "All";
+    if(!p) return Landing();
+    $("#page").innerHTML = `
+    <div class="pattern-head"><div class="pattern-num">${p.number}</div><div><div class="order">Pattern ${p.number} OF 15</div><h1>${esc(p.title)}</h1></div></div>
+    <div class="meta"><span class="pill">25 must-solve</span><span class="pill">Java 17/21</span><span class="pill">Beginner → advanced</span></div>
+    <div class="brief">
+        <p><b>What it is:</b> ${esc(p.brief)}</p>
+        <p><b>Recognition signals:</b> ${esc(p.recognize)}</p>
+        <p><b>Study order:</b> ${esc(p.study)}</p>
+    </div>
+    <h2>Theory & Core Mechanics</h2>
+    <div class="callout" style="border-color: var(--brand); background: var(--soft);"><b>Java Internal Mechanics:</b> ${esc(p.theory)}</div>
+    <h2>Scenario templates</h2><div class="scenario-grid">${p.scenarios.map(s => `<article class="scenario"><h3>${esc(s[0])}</h3><pre>${esc(s[1])}</pre></article>`).join("")}</div>
+    <div class="callout"><b>Java pitfalls:</b> ${esc(p.pitfalls)}</div>
+    <h2>Must-solve problems</h2><div class="pattern-progress"><span id="patternText"></span><div class="bar"><i id="patternBar"></i></div></div>
+    <div class="problem-tools"><input id="search" placeholder="Search number or title..."><div class="filters">${["All", "Easy", "Medium", "Hard"].map(x => `<button data-filter="${x}" class="${x==="All"?"active":""}">${x}</button>`).join("")}</div></div>
+    <div class="problems" id="problems"></div>
+    <div class="exit"><b>You may move on when:</b> ${esc(p.exit)} Also solve at least 18/25 and two unseen medium problems.</div>
+    <div class="footer">Open a problem in LeetCode, write brute force first, then optimize. Check the box only after you can explain the solution without notes.</div>`;
+    renderProblems(p, ""); activateNav(); window.scrollTo(0, 0);
+    $("#search").addEventListener("input", e => renderProblems(p, e.target.value));
+    document.querySelectorAll("[data-filter]").forEach(b => b.onclick = () => { filter = b.dataset.filter; document.querySelectorAll("[data-filter]").forEach(x => x.classList.toggle("active", x===b)); renderProblems(p, $("#search").value); });
+}
+
+function renderProblems(p, query) {
+    const q = query.trim().toLowerCase();
+    const list = p.problems.filter(x => (filter === "All" || x.difficulty === filter) && (!q || x.id.includes(q) || x.name.toLowerCase().includes(q)));
+    $("#problems").innerHTML = list.length ? list.map(x => `<label class="problem"><input type="checkbox" data-id="${x.id}" ${solved.has(x.id) ? "checked" : ""}> <span class="id">#${x.id}</span> <a href="https://leetcode.com/problems/${x.slug}/" target="_blank" rel="noopener">${esc(x.name)}</a> <span class="difficulty ${x.difficulty}">${x.difficulty}</span></label>`).join("") : `<div class="empty">No matching problems.</div>`;
+    document.querySelectorAll(".problem input").forEach(c => c.onchange = () => { if(c.checked) solved.add(c.dataset.id); else solved.delete(c.dataset.id); save(); updatePatternProgress(p); });
+    updatePatternProgress(p);
+}
+
+function updatePatternProgress(p) {
+    const done = p.problems.filter(x => solved.has(x.id)).length;
+    $("#patternText").textContent = `${done} of ${p.problems.length} completed`;
+    $("#patternBar").style.width = `${(done / p.problems.length) * 100}%`;
+}
+
+function activateNav() { document.querySelectorAll(".tab").forEach(b => b.classList.toggle("active", current === b.dataset.go)); }
+function go(value) { $("#sidebar").classList.remove("open"); value === "home" ? Landing() : patternPage(Number(value)); }
+
+document.addEventListener("click", e => { const b = e.target.closest("[data-go]"); if(b) go(b.dataset.go); });
+$("#menu").onclick = () => $("#sidebar").classList.toggle("open");
+$("#theme").onclick = () => { const d = document.documentElement.dataset.theme = document.documentElement.dataset.theme === "dark" ? "light" : "dark"; localStorage.setItem("dsaTheme", d); };
+document.documentElement.dataset.theme = localStorage.getItem("dsaTheme") || "light";
+
+renderNav();
+const hash = location.hash.match(/pattern-(\d+)/); 
+hash && patterns[hash[1]] ? patternPage(hash[1]) : Landing();
+</script>
+</body>
+</html>

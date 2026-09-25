@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SQL Deep Prep - Expert Edition</title>
+<style>
+    :root {
+        --sidebar-bg: #1e1e1e;
+        --sidebar-text: #cccccc;
+        --sidebar-hover: #ffffff;
+        --bg-color: #ffffff;
+        --text-color: #333333;
+        --link-color: #0066cc;
+        --code-bg: #f4f4f4;
+        --border-color: #e0e0e0;
+        --highlight-bg: #fffbe6;
+        --highlight-border: #f6c342;
+    }
+    body {
+        margin: 0;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        display: flex;
+        height: 100vh;
+        overflow: hidden;
+        background-color: var(--bg-color);
+        color: var(--text-color);
+        line-height: 1.6;
+    }
+    #sidebar {
+        width: 300px;
+        background-color: var(--sidebar-bg);
+        color: var(--sidebar-text);
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        overflow-y: auto;
+        padding: 20px;
+        box-sizing: border-box;
+        flex-shrink: 0;
+    }
+    #content {
+        flex: 1;
+        overflow-y: auto;
+        padding: 40px;
+        background-color: var(--bg-color);
+        scroll-behavior: smooth;
+    }
+    .content-inner {
+        max-width: 900px;
+        margin: 0 auto;
+    }
+    h1, h2, h3, h4 {
+        color: #111;
+        margin-top: 1.5em;
+        margin-bottom: 0.5em;
+    }
+    h1 { font-size: 2.2em; }
+    h2 { 
+        font-size: 1.6em; 
+        border-bottom: 1px solid var(--border-color); 
+        padding-bottom: 0.3em; 
+        padding-top: 40px; /* Offset for anchor links */
+        margin-top: -20px;
+    }
+    h3 { font-size: 1.3em; color: #0055a4; }
+    pre {
+        background-color: var(--code-bg);
+        padding: 15px;
+        border-radius: 5px;
+        overflow-x: auto;
+        font-family: "Consolas", "Monaco", monospace;
+        font-size: 14px;
+        border: 1px solid var(--border-color);
+        box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
+    }
+    code {
+        font-family: "Consolas", "Monaco", monospace;
+        background-color: var(--code-bg);
+        padding: 2px 5px;
+        border-radius: 3px;
+        font-size: 0.9em;
+        color: #d14;
+    }
+    pre code {
+        color: #333;
+        background-color: transparent;
+        padding: 0;
+    }
+    table {
+        border-collapse: collapse;
+        width: 100%;
+        margin: 20px 0;
+        font-size: 0.95em;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    th, td {
+        border: 1px solid var(--border-color);
+        padding: 10px;
+        text-align: left;
+    }
+    th {
+        background-color: #f0f4f8;
+        font-weight: bold;
+        color: #333;
+    }
+    .sidebar-title {
+        font-size: 1.4em;
+        font-weight: bold;
+        color: #fff;
+        margin-bottom: 5px;
+    }
+    .sidebar-subtitle {
+        font-size: 0.85em;
+        color: #888;
+        margin-bottom: 20px;
+    }
+    .search-box {
+        width: 100%;
+        padding: 8px;
+        margin-bottom: 20px;
+        border: none;
+        border-radius: 4px;
+        background-color: #333;
+        color: #fff;
+        box-sizing: border-box;
+    }
+    .search-box::placeholder { color: #888; }
+    .sidebar-section {
+        margin-top: 20px;
+        font-size: 0.8em;
+        text-transform: uppercase;
+        color: #888;
+        letter-spacing: 1px;
+        font-weight: bold;
+    }
+    ul.sidebar-nav {
+        list-style: none;
+        padding: 0;
+        margin: 10px 0;
+    }
+    ul.sidebar-nav li {
+        margin-bottom: 8px;
+        font-size: 0.95em;
+    }
+    ul.sidebar-nav a {
+        color: var(--sidebar-text);
+        text-decoration: none;
+        display: block;
+        transition: color 0.2s;
+    }
+    ul.sidebar-nav a:hover {
+        color: var(--sidebar-hover);
+    }
+    .highlight-box {
+        background-color: var(--highlight-bg);
+        padding: 15px;
+        border-left: 4px solid var(--highlight-border);
+        margin: 20px 0;
+        border-radius: 0 4px 4px 0;
+    }
+    .tag {
+        display: inline-block;
+        padding: 3px 8px;
+        border-radius: 12px;
+        font-size: 0.8em;
+        font-weight: bold;
+        margin-right: 5px;
+        background-color: #eee;
+    }
+    .tag.must-know { background-color: #ffe0b2; color: #e65100; }
+    .tag.interview { background-color: #c8e6c9; color: #1b5e20; }
+    .tag.production { background-color: #bbdefb; color: #0d47a1; }
+    .number-circle {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 24px;
+        height: 24px;
+        background-color: #333;
+        color: #fff;
+        border-radius: 50%;
+        font-size: 0.8em;
+        margin-right: 10px;
+    }
+    .checkbox-list { list-style: none; padding-left: 0; }
+    .checkbox-list li { margin-bottom: 10px; }
+    .checkbox-list input { margin-right: 10px; }
+</style>
+</head>
+<body>
+
+<div id="sidebar">
+    <div class="sidebar-title">SQL Deep Prep</div>
+    <div class="sidebar-subtitle">Expert-Expanded Edition</div>
+    
+    <input type="text" class="search-box" placeholder="Filter topics...">
+    
+    <div class="sidebar-section">START HERE</div>
+    <ul class="sidebar-nav">
+        <li><a href="#sec-0">0. How to read this</a></li>
+        <li><a href="#sec-0b">0b. Sample database (full)</a></li>
+    </ul>
+
+    <div class="sidebar-section">SQL TOPICS</div>
+    <ul class="sidebar-nav">
+        <li><a href="#sec-1">1. Fundamentals</a></li>
+        <li><a href="#sec-2">2. Joins</a></li>
+        <li><a href="#sec-3">3. Aggregations</a></li>
+        <li><a href="#sec-4">4. Subqueries</a></li>
+        <li><a href="#sec-5">5. CTE</a></li>
+        <li><a href="#sec-6">6. Window Functions</a></li>
+        <li><a href="#sec-7">7. Set Operations</a></li>
+        <li><a href="#sec-8">8. Constraints</a></li>
+        <li><a href="#sec-9">9. Indexes (deep)</a></li>
+        <li><a href="#sec-10">10. Query Optimization</a></li>
+        <li><a href="#sec-11">11. Normalization</a></li>
+        <li><a href="#sec-12">12. Transactions & ACID</a></li>
+        <li><a href="#sec-13">13. Locks & Concurrency</a></li>
+        <li><a href="#sec-14">14. Views</a></li>
+        <li><a href="#sec-15">15. Procedures & Functions</a></li>
+        <li><a href="#sec-16">16. SQL Data Types</a></li>
+        <li><a href="#sec-17">17. Interview Problems</a></li>
+        <li><a href="#sec-18">18. Database Design</a></li>
+    </ul>
+
+    <div class="sidebar-section">REAL-TIME / PRODUCTION DB</div>
+    <ul class="sidebar-nav">
+        <li><a href="#sec-19">19. Production DB concepts</a></li>
+        <li><a href="#sec-19a">19a. Replication</a></li>
+        <li><a href="#sec-19b">19b. Sharding, partitioning</a></li>
+        <li><a href="#sec-19c">19c. HA, pooling, caching</a></li>
+    </ul>
+
+    <div class="sidebar-section">REVIEW</div>
+    <ul class="sidebar-nav">
+        <li><a href="#sec-8020">80/20 Plan</a></li>
+        <li><a href="#sec-checklist">Checklist</a></li>
+    </ul>
+</div>
+
+<div id="content">
+    <div class="content-inner">
+        <h1>SQL from zero ➔ interview: why, how, where — with a real sample database</h1>
+        <p>This version is written for someone who wants to master SQL from the ground up, all the way to advanced architectural concepts. Every major idea is explained conceptually, demonstrated with expertly crafted SQL on a unified sample database, and then connected to interview expectations and real-world production systems.</p>
+        
+        <div>
+            <span class="tag must-know">Must know</span>
+            <span class="tag interview">Interview</span>
+            <span class="tag production">Production DB</span>
+        </div>
+
+        <h2 id="sec-0">0. How to read this page (Beginner map)</h2>
+        <p><strong>Big picture in one paragraph:</strong> A database is a highly optimized storage engine that keeps data in structured tables (similar to Excel sheets, but capable of handling billions of rows). SQL (Structured Query Language) is the declarative language used to communicate with this engine. You use it to ask questions ("show me employees in engineering") and manipulate state ("increase Ben's salary"). Interviews test your ability to retrieve data efficiently, combine entities logically, and understand the architectural impact of your queries under massive concurrency.</p>
+
+        <p><span class="number-circle">1</span> <strong>First:</strong> Read <u>Sample database</u>. Memorize the 3 tables and the 5-6 people. Every example in this guide relies on this specific data model.</p>
+        <p><span class="number-circle">2</span> <strong>Then:</strong> Fundamentals -> Joins -> Group By. Mastering these three concepts alone will allow you to pass ~50% of standard data interview questions.</p>
+        <p><span class="number-circle">3</span> <strong>Then:</strong> Window functions -> CTE -> Subqueries. These advanced analytical features are the primary differentiators between junior and mid/senior-level engineers.</p>
+        <p><span class="number-circle">4</span> <strong>Then:</strong> Indexes, EXPLAIN, ACID, locks. These answer the critical "what happens in production" questions when multiple users hit the database simultaneously.</p>
+        <p><span class="number-circle">5</span> <strong>Finally:</strong> Section 19 (replication / sharding) — how enterprise companies keep databases highly available, resilient, and blazing fast under immense load.</p>
+
+        <div class="highlight-box">
+            <strong>Expert Note:</strong> While MySQL, PostgreSQL, SQL Server, and Oracle all speak "SQL", they have dialectal differences (e.g., <code>LIMIT</code> in Postgres vs <code>TOP</code> in SQL Server, or varying support for `FULL OUTER JOIN`). The concepts taught here are universal. Where dialects significantly differ, this guide points it out.
+        </div>
+
+        <h2 id="sec-0b">0b. Sample database — full walkthrough</h2>
+        <p><strong>The Story:</strong><br>A fictional company has <strong>departments</strong> (Engineering, Sales, HR). People (<strong>employees</strong>) work in these departments. Some employees manage other employees, creating a hierarchy. We also track <strong>orders</strong> for a couple of customers to demonstrate date aggregations and 'latest record per customer' problems.</p>
+
+        <h3>Table 1 — departments</h3>
+        <p>What it stores: One row per team. <code>department_id</code> is the unique identifier (Primary Key).</p>
+        <table>
+            <tr><th>department_id</th><th>department_name</th><th>location</th></tr>
+            <tr><td>10</td><td>Engineering</td><td>Melbourne</td></tr>
+            <tr><td>20</td><td>Sales</td><td>Sydney</td></tr>
+            <tr><td>30</td><td>HR</td><td>Melbourne</td></tr>
+        </table>
+
+        <h3>Table 2 — employees</h3>
+        <p>What it stores: People. <code>dept_id</code> points to a department (Foreign Key, can be NULL if a person is unassigned). <code>manager_id</code> points to another employee in this same table (a self-referencing relationship).</p>
+        <table>
+            <tr><th>id</th><th>name</th><th>dept_id</th><th>salary</th><th>manager_id</th><th>hire_date</th></tr>
+            <tr><td>1</td><td>Ana</td><td>10</td><td>90000</td><td>NULL</td><td>2020-01-15</td></tr>
+            <tr><td>2</td><td>Ben</td><td>10</td><td>70000</td><td>1</td><td>2021-03-01</td></tr>
+            <tr><td>3</td><td>Cia</td><td>20</td><td>85000</td><td>1</td><td>2020-06-20</td></tr>
+            <tr><td>4</td><td>Dan</td><td>20</td><td>60000</td><td>3</td><td>2022-02-10</td></tr>
+            <tr><td>5</td><td>Eve</td><td>NULL</td><td>55000</td><td>1</td><td>2023-01-05</td></tr>
+            <tr><td>6</td><td>Ben</td><td>10</td><td>70000</td><td>1</td><td>2021-08-01</td></tr>
+        </table>
+        <p><em>Notice: We have two people named Ben. Eve has no department. Ana is the top boss (manager_id is NULL).</em></p>
+
+        <h3>Table 3 — orders</h3>
+        <p>What it stores: Transactional order history used for time-series and window function challenges.</p>
+        <table>
+            <tr><th>order_id</th><th>customer_id</th><th>order_date</th><th>amount</th></tr>
+            <tr><td>101</td><td>C1</td><td>2024-01-01</td><td>100</td></tr>
+            <tr><td>102</td><td>C1</td><td>2024-01-03</td><td>250</td></tr>
+            <tr><td>103</td><td>C2</td><td>2024-01-02</td><td>80</td></tr>
+            <tr><td>104</td><td>C1</td><td>2024-01-05</td><td>40</td></tr>
+            <tr><td>105</td><td>C2</td><td>2024-01-04</td><td>120</td></tr>
+        </table>
+
+        <h3>Create + insert script (Setup for your local environment)</h3>
+        <pre><code>CREATE TABLE departments (
+    department_id INT PRIMARY KEY,
+    department_name VARCHAR(50) NOT NULL,
+    location VARCHAR(50)
+);
+
+CREATE TABLE employees (
+    id INT PRIMARY KEY,
+    name VARCHAR(50) NOT NULL,
+    dept_id INT,
+    salary DECIMAL(10,2) NOT NULL,
+    manager_id INT,
+    hire_date DATE,
+    CONSTRAINT fk_emp_dept FOREIGN KEY (dept_id) REFERENCES departments(department_id),
+    CONSTRAINT fk_emp_mgr FOREIGN KEY (manager_id) REFERENCES employees(id)
+);
+
+CREATE TABLE orders (
+    order_id INT PRIMARY KEY,
+    customer_id VARCHAR(10) NOT NULL,
+    order_date DATE NOT NULL,
+    amount DECIMAL(10,2) NOT NULL
+);
+
+-- Insert Data
+INSERT INTO departments VALUES (10, 'Engineering', 'Melbourne'), (20, 'Sales', 'Sydney'), (30, 'HR', 'Melbourne');
+INSERT INTO employees VALUES 
+(1, 'Ana', 10, 90000, NULL, '2020-01-15'),
+(2, 'Ben', 10, 70000, 1, '2021-03-01'),
+(3, 'Cia', 20, 85000, 1, '2020-06-20'),
+(4, 'Dan', 20, 60000, 3, '2022-02-10'),
+(5, 'Eve', NULL, 55000, 1, '2023-01-05'),
+(6, 'Ben', 10, 70000, 1, '2021-08-01');
+INSERT INTO orders VALUES 
+(101, 'C1', '2024-01-01', 100), (102, 'C1', '2024-01-03', 250), 
+(103, 'C2', '2024-01-02', 80), (104, 'C1', '2024-01-05', 40), (105, 'C2', '2024-01-04', 120);
+</code></pre>
+
+        <h2 id="sec-1">1. SQL Fundamentals <span class="tag must-know">Must know 100%</span></h2>
+        <p>SQL is declarative. You tell the engine <em>what</em> you want, and the query optimizer figures out the <em>how</em>. Here are the core verbs:</p>
+        
+        <p><strong>SELECT (The Projection):</strong> Determines which columns to return. Using <code>SELECT *</code> is an anti-pattern in production because it wastes memory and network bandwidth returning data the application doesn't need.</p>
+        <pre><code>SELECT name, salary FROM employees; -- Best practice
+SELECT * FROM employees; -- Avoid in production code</code></pre>
+
+        <p><strong>WHERE (The Filter):</strong> Keeps only rows that evaluate to TRUE. This happens <em>before</em> any grouping or sorting. This is where indexes are utilized.</p>
+        <pre><code>SELECT name FROM employees WHERE salary >= 70000;
+-- Returns: Ana, Ben, Cia, Ben</code></pre>
+
+        <p><strong>DISTINCT (Deduplication):</strong> Removes duplicate rows from the final result set. It requires the database to sort or hash the results behind the scenes, making it computationally expensive.</p>
+        <pre><code>SELECT DISTINCT name FROM employees; 
+-- Returns 5 rows (Ben is only listed once)</code></pre>
+
+        <p><strong>ORDER BY (Sorting):</strong> Orders the final output. Can sort ASC (ascending, default) or DESC (descending). You can sort by multiple columns.</p>
+        <pre><code>SELECT name, salary FROM employees ORDER BY salary DESC, name ASC;</code></pre>
+
+        <p><strong>LIMIT / TOP / FETCH (Pagination):</strong> Restricts the number of returned rows. Crucial for web apps (e.g., "Show top 10 results").</p>
+        <pre><code>-- PostgreSQL / MySQL
+SELECT name FROM employees ORDER BY salary DESC LIMIT 1;
+-- SQL Server
+-- SELECT TOP 1 name FROM employees ORDER BY salary DESC;</code></pre>
+
+        <p><strong>IN & BETWEEN:</strong> <code>IN</code> matches any value in a specific list. <code>BETWEEN</code> is for inclusive ranges.</p>
+        <pre><code>SELECT name FROM employees WHERE dept_id IN (10, 20);
+SELECT name FROM employees WHERE hire_date BETWEEN '2020-01-01' AND '2021-12-31';</code></pre>
+
+        <p><strong>LIKE (Pattern Matching):</strong> Used for text search. <code>%</code> represents zero or more characters. <code>_</code> represents exactly one character. <em>Expert tip: Leading wildcards (e.g., '%en') prevent index usage and force a slow full table scan.</em></p>
+        <pre><code>SELECT name FROM employees WHERE name LIKE 'B%'; -- Finds both 'Ben's</code></pre>
+
+        <p><strong>IS NULL (The Beginner Trap):</strong> In SQL, <code>NULL</code> represents an unknown or missing value. It is NOT zero, and it is NOT an empty string. You cannot use <code>= NULL</code>. Anything compared to NULL with an equals sign evaluates to UNKNOWN, which filters out the row.</p>
+        <pre><code>SELECT name FROM employees WHERE dept_id IS NULL; -- Correct (Returns Eve)
+-- SELECT name FROM employees WHERE dept_id = NULL; -- WRONG (Returns nothing)</code></pre>
+
+        <h3>Logical order of operations</h3>
+        <p>You write SQL in one order, but the database executes it in another. This is why you cannot use a `SELECT` alias in a `WHERE` clause—the `WHERE` clause happens before the alias is even created!</p>
+        <ol>
+            <li><strong>FROM / JOIN:</strong> The DB gathers the base tables.</li>
+            <li><strong>WHERE:</strong> Filters out rows that don't match the condition.</li>
+            <li><strong>GROUP BY:</strong> Rolls rows up into aggregate buckets.</li>
+            <li><strong>HAVING:</strong> Filters the aggregated buckets.</li>
+            <li><strong>SELECT:</strong> Evaluates expressions, math, and assigns aliases.</li>
+            <li><strong>ORDER BY:</strong> Sorts the final derived list.</li>
+            <li><strong>LIMIT:</strong> Chops off the top N rows.</li>
+        </ol>
+
+        <h2 id="sec-2">2. Joins <span class="tag must-know">Most asked</span></h2>
+        <p>Relational databases split data to avoid redundancy (Normalization). Joins are how we stitch that data back together. The <code>ON</code> clause dictates how the tables relate.</p>
+        
+        <h3>INNER JOIN (Intersection)</h3>
+        <p>Only returns rows where a match exists in <em>both</em> tables. If an employee has no department (Eve), or a department has no employees (HR), they are dropped.</p>
+        <pre><code>SELECT e.name, d.department_name 
+FROM employees e 
+INNER JOIN departments d ON e.dept_id = d.department_id;
+-- Eve is missing. HR is missing.</code></pre>
+
+        <h3>LEFT JOIN (Keep the Left)</h3>
+        <p>Returns all rows from the left table (`employees`), plus matched rows from the right table. If there is no match on the right, the right columns are populated with `NULL`.</p>
+        <pre><code>SELECT e.name, d.department_name 
+FROM employees e 
+LEFT JOIN departments d ON e.dept_id = d.department_id;
+-- Eve is included. Her department_name is NULL. HR is still missing.</code></pre>
+
+        <h3>RIGHT JOIN & FULL OUTER JOIN</h3>
+        <p><code>RIGHT JOIN</code> is the exact opposite of a Left Join (keeps all departments, meaning HR shows up with NULL employees). <code>FULL OUTER JOIN</code> keeps everything from both sides (Eve is there with a NULL dept, and HR is there with a NULL employee).</p>
+
+        <h3>SELF JOIN (Hierarchies)</h3>
+        <p>Joining a table to itself. You must use aliases (e.g., `e1` and `e2`) so the database knows which version of the table you are referring to. Crucial for manager-employee relationships.</p>
+        <pre><code>-- Find employees and their manager's name
+SELECT emp.name AS employee, mgr.name AS manager
+FROM employees emp
+LEFT JOIN employees mgr ON emp.manager_id = mgr.id;
+-- Ana's manager will be NULL because of the LEFT JOIN.</code></pre>
+
+        <h3>CROSS JOIN (Cartesian Product)</h3>
+        <p>Matches every row in table A with every row in table B. 6 employees x 3 departments = 18 rows. Rarely used in production unless generating combinations or calendar tables.</p>
+
+        <h2 id="sec-3">3. Aggregations & Grouping</h2>
+        <p>Aggregations take multiple rows and smash them into a single summary value (e.g., <code>COUNT</code>, <code>SUM</code>, <code>AVG</code>, <code>MAX</code>, <code>MIN</code>).</p>
+        
+        <h3>GROUP BY</h3>
+        <p>When you want aggregates per category (e.g., average salary <em>per department</em>), use <code>GROUP BY</code>. Every column in your <code>SELECT</code> clause that is NOT inside an aggregate function MUST be listed in the <code>GROUP BY</code> clause.</p>
+        <pre><code>SELECT dept_id, COUNT(*) as headcount, AVG(salary) as avg_pay
+FROM employees
+GROUP BY dept_id;
+-- Note: Eve is grouped into a bucket where dept_id is NULL.</code></pre>
+
+        <h3>WHERE vs HAVING (Critical Interview Concept)</h3>
+        <p><strong>WHERE</strong> filters individual rows <em>before</em> they are grouped. <strong>HAVING</strong> filters the aggregated buckets <em>after</em> they are grouped.</p>
+        <pre><code>SELECT dept_id, AVG(salary) 
+FROM employees
+WHERE salary > 50000       -- 1. Discard anyone making <= 50k before doing math
+GROUP BY dept_id           -- 2. Put remaining people into department buckets
+HAVING AVG(salary) > 70000; -- 3. Discard buckets whose average is <= 70k</code></pre>
+
+        <h2 id="sec-4">4. Subqueries</h2>
+        <p>A query nested inside another query. Used when you need a dynamic value to filter against.</p>
+        
+        <h3>Scalar Subquery (Returns 1 row, 1 column)</h3>
+        <pre><code>-- Who makes more than the overall average?
+SELECT name, salary FROM employees 
+WHERE salary > (SELECT AVG(salary) FROM employees);</code></pre>
+
+        <h3>Nested Subquery (Returns a list of values)</h3>
+        <pre><code>-- Find employees in Melbourne
+SELECT name FROM employees 
+WHERE dept_id IN (
+    SELECT department_id FROM departments WHERE location = 'Melbourne'
+);</code></pre>
+
+        <h3>Correlated Subquery</h3>
+        <p>The inner query references a column from the outer query. It acts like a loop, executing the inner query once for every row in the outer query. These can be very slow if not properly indexed.</p>
+        <pre><code>-- Find employees who make more than THEIR specific department's average
+SELECT e1.name, e1.salary, e1.dept_id
+FROM employees e1
+WHERE e1.salary > (
+    SELECT AVG(salary) 
+    FROM employees e2 
+    WHERE e2.dept_id = e1.dept_id -- The correlation link
+);</code></pre>
+
+        <h3>EXISTS</h3>
+        <p>Used to check for the existence of rows. It is highly optimized because it stops scanning the moment it finds a single matching row (boolean short-circuiting).</p>
+        <pre><code>-- Find departments that actually have employees
+SELECT department_name FROM departments d
+WHERE EXISTS (
+    SELECT 1 FROM employees e WHERE e.dept_id = d.department_id
+);</code></pre>
+
+        <h2 id="sec-5">5. CTE (Common Table Expressions)</h2>
+        <p>A CTE (declared with the <code>WITH</code> keyword) allows you to define a temporary, named result set at the top of your query. It makes complex logic vastly more readable than deeply nested subqueries.</p>
+        <pre><code>WITH EngineeringStaff AS (
+    SELECT id, name, salary FROM employees WHERE dept_id = 10
+),
+HighEarners AS (
+    SELECT name FROM EngineeringStaff WHERE salary > 75000
+)
+SELECT * FROM HighEarners;</code></pre>
+
+        <h3>Recursive CTEs</h3>
+        <p>Used to walk hierarchical data (like trees, org charts, or graphs). It consists of an anchor member (the root) and a recursive member (how to find the children) unioned together.</p>
+        <pre><code>WITH RECURSIVE OrgChart AS (
+    -- Anchor: Find the big boss (Ana)
+    SELECT id, name, manager_id, 1 as level 
+    FROM employees WHERE manager_id IS NULL
+    
+    UNION ALL
+    
+    -- Recursive step: Join to find people managed by the previous level
+    SELECT e.id, e.name, e.manager_id, o.level + 1
+    FROM employees e
+    INNER JOIN OrgChart o ON e.manager_id = o.id
+)
+SELECT * FROM OrgChart ORDER BY level;</code></pre>
+
+        <h2 id="sec-6">6. Window Functions <span class="tag interview">Differentiator</span></h2>
+        <p>Unlike <code>GROUP BY</code>, which collapses rows, Window Functions perform calculations across a set of rows related to the current row, while keeping all original rows intact.</p>
+        
+        <h3>Ranking (ROW_NUMBER vs RANK vs DENSE_RANK)</h3>
+        <pre><code>SELECT name, salary, dept_id,
+    ROW_NUMBER() OVER(PARTITION BY dept_id ORDER BY salary DESC) as row_num,
+    RANK() OVER(PARTITION BY dept_id ORDER BY salary DESC) as rank,
+    DENSE_RANK() OVER(PARTITION BY dept_id ORDER BY salary DESC) as dense
+FROM employees;</code></pre>
+        <ul>
+            <li><strong>ROW_NUMBER:</strong> Always strictly sequential (1, 2, 3, 4). Ties are broken arbitrarily.</li>
+            <li><strong>RANK:</strong> Ties get the same number, but leaves gaps (1, 2, 2, 4).</li>
+            <li><strong>DENSE_RANK:</strong> Ties get the same number, NO gaps (1, 2, 2, 3).</li>
+        </ul>
+
+        <h3>LAG and LEAD</h3>
+        <p>Allows you to compare the current row to the previous (LAG) or next (LEAD) row without a complex self-join. Heavily used in time-series analysis (e.g., month-over-month growth).</p>
+        <pre><code>SELECT order_date, amount,
+    LAG(amount) OVER(ORDER BY order_date) as previous_order_amount,
+    amount - LAG(amount) OVER(ORDER BY order_date) as difference
+FROM orders
+WHERE customer_id = 'C1';</code></pre>
+
+        <h2 id="sec-7">7. Set Operations</h2>
+        <p>While JOINs combine tables horizontally (adding columns), Set Operations combine results vertically (stacking rows). Both queries must return the exact same number of columns with compatible data types.</p>
+        
+        <h3>UNION vs UNION ALL</h3>
+        <pre><code>SELECT name FROM employees WHERE dept_id = 10
+UNION
+SELECT name FROM employees WHERE salary > 60000;</code></pre>
+        <p><strong>UNION</strong> automatically removes duplicate rows from the final output. Because it has to sort/hash the data to find duplicates, it is slower. <strong>UNION ALL</strong> blindly glues the datasets together, keeping duplicates. <em>Expert tip: Always use UNION ALL unless you specifically need deduplication for performance.</em></p>
+
+        <h2 id="sec-8">8. Constraints</h2>
+        <p>Data integrity is paramount. Application code has bugs; constraints ensure bad data physically cannot be written to the disk.</p>
+        <ul>
+            <li><strong>PRIMARY KEY:</strong> Uniquely identifies a row. Inherently enforces <code>NOT NULL</code> and <code>UNIQUE</code>. A table can only have one PK (though it can be composite, spanning multiple columns).</li>
+            <li><strong>FOREIGN KEY:</strong> Ensures referential integrity. An employee's <code>dept_id</code> MUST exist in the <code>departments</code> table (or be NULL). Prevents "orphan" records.</li>
+            <li><strong>UNIQUE:</strong> Ensures all values in a column are different. (e.g., email addresses).</li>
+            <li><strong>CHECK:</strong> Custom boolean logic. <code>CHECK (salary > 0)</code>.</li>
+        </ul>
+
+        <h2 id="sec-9">9. Indexes (deep) <span class="tag production">Very important</span></h2>
+        <p>An index is a separate, specialized data structure (usually a B-Tree) that keeps pointers to table rows sorted by a specific key. Without an index, querying <code>WHERE name = 'Dan'</code> requires a <strong>Full Table Scan</strong> (reading every row on disk). With an index, the DB traverses the B-Tree in O(log N) time to find Dan instantly.</p>
+        
+        <h3>Clustered vs Non-Clustered Indexes</h3>
+        <ul>
+            <li><strong>Clustered Index:</strong> This dictates the actual physical order of the data on the disk. A table can only have ONE clustered index (usually the Primary Key). When you search by PK, the database finds the data directly at the leaf node.</li>
+            <li><strong>Non-Clustered (Secondary) Index:</strong> A separate structure. The leaf nodes contain the indexed value (e.g., <code>name</code>) and a pointer back to the actual row data (the clustered key). Finding data this way is slightly slower because it requires a "bookmark lookup" back to the main table.</li>
+        </ul>
+
+        <h3>The Cost of Indexes</h3>
+        <p>Indexes drastically speed up <code>SELECT</code> queries, but they slow down <code>INSERT</code>, <code>UPDATE</code>, and <code>DELETE</code> operations. Every time you write data to the table, the database must synchronously update the B-Tree structures of every index attached to that table. Over-indexing a high-write table will crush database performance.</p>
+
+        <h2 id="sec-10">10. Query Optimization</h2>
+        <p>When a query is slow, experts use <code>EXPLAIN</code> (or <code>EXPLAIN ANALYZE</code> in Postgres to run and time it) to read the database execution plan.</p>
+        <ul>
+            <li><strong>Sequential/Table Scan:</strong> Reading every row. Bad for massive tables, fine for tiny configuration tables.</li>
+            <li><strong>Index Seek:</strong> Navigating the B-Tree to find a specific range of rows. The holy grail of performance.</li>
+            <li><strong>Index Scan:</strong> Reading the entire index leaf-level. Better than a table scan because the index is smaller in memory, but worse than a Seek.</li>
+            <li><strong>Hash Join vs Nested Loop:</strong> If the DB joins massive tables, it creates an in-memory Hash table (Hash Join). If joining a tiny table to a big indexed table, it loops through the tiny one and looks up the big one (Nested Loop).</li>
+        </ul>
+
+        <h2 id="sec-11">11. Normalization</h2>
+        <p>Normalization is the process of structuring data to minimize redundancy and prevent anomalies on updates/deletes.</p>
+        <ul>
+            <li><strong>1NF (First Normal Form):</strong> Atomic values. No arrays or comma-separated lists in a single cell.</li>
+            <li><strong>2NF:</strong> Must be 1NF, and all non-key attributes must depend on the ENTIRE primary key (matters mostly for composite keys).</li>
+            <li><strong>3NF:</strong> Must be 2NF, and no transitive dependencies. (e.g., If Table has <code>EmpID, DeptID, DeptLocation</code>, the location depends on DeptID, not EmpID. Move Location to the Departments table).</li>
+        </ul>
+        <p><strong>Denormalization:</strong> In massive read-heavy reporting systems (Data Warehouses), joining 8 normalized tables is too slow. Engineers intentionally duplicate data (denormalize) to create flat, wide tables for faster read performance.</p>
+
+        <h2 id="sec-12">12. Transactions & ACID</h2>
+        <p>A transaction wraps multiple SQL statements into a single, atomic unit of work.</p>
+        <pre><code>BEGIN TRANSACTION;
+UPDATE accounts SET balance = balance - 100 WHERE id = 1;
+UPDATE accounts SET balance = balance + 100 WHERE id = 2;
+COMMIT; -- Or ROLLBACK if an error occurs</code></pre>
+        <ul>
+            <li><strong>A - Atomicity:</strong> All statements succeed, or none succeed. No half-finished transfers.</li>
+            <li><strong>C - Consistency:</strong> Database constraints (like balances must be > 0) are valid before and after.</li>
+            <li><strong>I - Isolation:</strong> Concurrent transactions don't interfere. User B doesn't see User A's uncommitted data (depending on isolation levels like Read Committed or Serializable).</li>
+            <li><strong>D - Durability:</strong> Once COMMIT returns success, the data is permanent, surviving immediate power failures via Write-Ahead Logging (WAL).</li>
+        </ul>
+
+        <h2 id="sec-13">13. Locks & Concurrency</h2>
+        <p>To provide Isolation, databases use locks.</p>
+        <ul>
+            <li><strong>Shared (Read) Locks:</strong> Multiple readers can hold this. Writers are blocked.</li>
+            <li><strong>Exclusive (Write) Locks:</strong> Only one transaction can hold this. Blocks all other readers and writers from that row/table.</li>
+            <li><strong>Deadlocks:</strong> Transaction 1 locks Row A and needs Row B. Transaction 2 locks Row B and needs Row A. They wait forever. The DB detects this, kills one transaction (the victim), and forces the application to retry.</li>
+        </ul>
+
+        <h2 id="sec-14">14. Views</h2>
+        <p>A View is a stored SQL query that acts like a virtual table. It hides complexity and secures underlying data (e.g., hiding the salary column).</p>
+        <pre><code>CREATE VIEW public_employee_directory AS
+SELECT id, name, dept_id FROM employees; -- Salary excluded
+
+SELECT * FROM public_employee_directory;</code></pre>
+        <p><strong>Materialized Views:</strong> Unlike a standard view which runs the query dynamically every time, a Materialized View physically computes and stores the results on disk. It makes heavy analytical queries instant, but the data becomes stale and must be manually refreshed (<code>REFRESH MATERIALIZED VIEW</code>).</p>
+
+        <h2 id="sec-15">15. Procedures & Functions</h2>
+        <p>Stored Procedures and Functions store business logic directly inside the database engine. This reduces network round-trips but couples your architecture tightly to the specific database vendor (e.g., PL/pgSQL in Postgres, T-SQL in SQL Server).</p>
+        <ul>
+            <li><strong>Procedures:</strong> Designed for executing actions. They can handle transactions (BEGIN/COMMIT), execute complex ETL flows, and modify state without returning a specific value.</li>
+            <li><strong>Functions:</strong> Designed to compute and return a value. Must be deterministic and usually cannot modify state or run transactions. They can be used directly in SQL <code>SELECT</code> statements (e.g., <code>SELECT calculate_tax(salary) FROM employees</code>).</li>
+        </ul>
+
+        <h2 id="sec-16">16. SQL Data Types</h2>
+        <p>Choosing the correct data type is critical for indexing efficiency and disk space.</p>
+        <ul>
+            <li><strong>INT / BIGINT:</strong> Standard integers. BIGINT for massive IDs.</li>
+            <li><strong>DECIMAL(precision, scale) / NUMERIC:</strong> Used for financial data. E.g., DECIMAL(10,2) allows 8 digits before the decimal and 2 after. NEVER use FLOAT for money, as floating-point math causes rounding anomalies.</li>
+            <li><strong>VARCHAR(n):</strong> Variable-length string. Only takes up as much disk space as the actual string length requires.</li>
+            <li><strong>CHAR(n):</strong> Fixed-length string. 'YES' in CHAR(10) is padded with 7 trailing spaces. Very fast for exactly uniform data (like 2-letter state codes), bad for general text.</li>
+            <li><strong>TIMESTAMP / DATETIME:</strong> Stores both date and time. TIMESTAMP often accounts for timezones automatically depending on the engine.</li>
+        </ul>
+
+        <h2 id="sec-17">17. Real Interview Problem Solving</h2>
+        <p>Here are the definitive solutions to the most common SQL interview challenges based on our sample data.</p>
+        
+        <h3>1. Nth highest salary (Using DENSE_RANK)</h3>
+        <pre><code>WITH RankedSalaries AS (
+    SELECT salary, DENSE_RANK() OVER (ORDER BY salary DESC) as rnk
+    FROM employees
+)
+SELECT DISTINCT salary FROM RankedSalaries WHERE rnk = 2; -- 2nd highest (85000)</code></pre>
+
+        <h3>2. Duplicate records (Find names that appear more than once)</h3>
+        <pre><code>SELECT name, COUNT(*) 
+FROM employees 
+GROUP BY name 
+HAVING COUNT(*) > 1; -- Returns 'Ben'</code></pre>
+
+        <h3>3. Employees earning more than their manager</h3>
+        <pre><code>SELECT e.name, e.salary, m.name as mgr_name, m.salary as mgr_salary
+FROM employees e
+INNER JOIN employees m ON e.manager_id = m.id
+WHERE e.salary > m.salary; -- Returns 'Cia' (85k > Ana's 90k? No. But imagine if manager made less).</code></pre>
+
+        <h3>4. Top N per department (Top earner per team)</h3>
+        <pre><code>WITH DeptRanks AS (
+    SELECT name, dept_id, salary,
+           ROW_NUMBER() OVER (PARTITION BY dept_id ORDER BY salary DESC) as rnk
+    FROM employees
+    WHERE dept_id IS NOT NULL
+)
+SELECT * FROM DeptRanks WHERE rnk = 1;</code></pre>
+
+        <h3>5. Running total of orders for customer C1</h3>
+        <pre><code>SELECT order_date, amount,
+       SUM(amount) OVER (PARTITION BY customer_id ORDER BY order_date) as running_total
+FROM orders
+WHERE customer_id = 'C1';</code></pre>
+
+        <h2 id="sec-18">18. Database Design</h2>
+        <p>Interviews often require you to design schemas on a whiteboard. Understand cardinality:</p>
+        <ul>
+            <li><strong>1-to-1 (1:1):</strong> E.g., User & User_Profile. Enforced by putting a UNIQUE constraint on the Foreign Key.</li>
+            <li><strong>1-to-Many (1:N):</strong> E.g., Department & Employees. The Foreign Key (<code>dept_id</code>) always goes on the "Many" side (the Employees table).</li>
+            <li><strong>Many-to-Many (M:N):</strong> E.g., Students & Courses. Relational databases cannot handle M:N directly. You must create a third "Junction" or "Mapping" table (<code>Enrollments</code>) with foreign keys pointing to both Students and Courses.</li>
+        </ul>
+
+        <h2 id="sec-19">19. Real-time / production database concepts <span class="tag production">Advanced</span></h2>
+        <p>Mid-to-senior interviews move beyond syntax and focus on distributed systems and system architecture.</p>
+        
+        <h3 id="sec-19a">19a. Replication</h3>
+        <p>A single database server represents a Single Point of Failure (SPOF) and has finite read capacity. <strong>Replication</strong> solves this by streaming the transaction logs (WAL) from a Primary node to one or more Replica nodes.</p>
+        <ul>
+            <li><strong>High Availability:</strong> If the Primary crashes, a Replica is instantly promoted to become the new Primary.</li>
+            <li><strong>Read Scaling:</strong> The application routes all heavy <code>SELECT</code> queries to the Replicas, leaving the Primary dedicated to handling <code>INSERT/UPDATE/DELETE</code> traffic.</li>
+            <li><strong>Replication Lag:</strong> In async replication, the replica might be milliseconds behind. If a user updates their profile (write to Primary) and refreshes the page (read from Replica), they might see stale data. System architects must handle this tradeoff.</li>
+        </ul>
+
+        <h3 id="sec-19b">19b. Sharding and Partitioning</h3>
+        <p>When a table hits billions of rows, indexes become too large to fit in RAM, and a single server's disk I/O becomes the bottleneck.</p>
+        <ul>
+            <li><strong>Partitioning:</strong> Logical separation on the <em>same</em> physical server. You can partition an `orders` table by month. Queries looking for January data only scan the January partition, ignoring the rest.</li>
+            <li><strong>Sharding:</strong> Physical separation across <em>different</em> servers. You might route Customers A-M to Server 1, and N-Z to Server 2. This allows infinite horizontal scaling but makes joins across shards incredibly difficult or impossible at the database level.</li>
+        </ul>
+
+        <h3 id="sec-19c">19c. HA, pooling, and caching</h3>
+        <ul>
+            <li><strong>Connection Pooling:</strong> Opening a TCP connection to Postgres takes precious milliseconds. If 500 web server threads open connections simultaneously, the database runs out of RAM. A connection pooler (like PgBouncer) acts as a middleman, maintaining a small, warm pool of 20 connections to the database and multiplexing the 500 app requests through them.</li>
+            <li><strong>Caching (Redis):</strong> Databases hit disk. Caches hit RAM. If a query calculates the top 10 products and takes 2 seconds, the application should cache the result in Redis for 5 minutes. The DB is spared the load, but the app must tolerate 5 minutes of data staleness.</li>
+        </ul>
+
+        <h2 id="sec-8020">80/20 Interview Preparation Plan</h2>
+        <p>Focus 80% of your time on these core areas to maximize interview success:</p>
+        <ol>
+            <li>Master <strong>JOINs</strong> completely. Understand why <code>LEFT JOIN</code> behaves differently when conditions are in the <code>ON</code> clause versus the <code>WHERE</code> clause.</li>
+            <li>Understand the execution order: <code>WHERE</code> filters rows, <code>GROUP BY</code> creates buckets, <code>HAVING</code> filters buckets.</li>
+            <li>Write <strong>Window Functions</strong> (<code>ROW_NUMBER() OVER(PARTITION BY x ORDER BY y)</code>) fluently on a whiteboard. It solves almost all "Top N" problems.</li>
+            <li>Use <strong>CTEs</strong> instead of nested subqueries to show clean, maintainable coding standards.</li>
+            <li>Be able to explain how a <strong>B-Tree Index</strong> speeds up reads but slows down writes, and when a Full Table Scan is actually faster than an Index Seek.</li>
+            <li>Understand <strong>ACID</strong> properties and why transactions are mandatory for financial systems.</li>
+        </ol>
+
+        <h2 id="sec-checklist">Must-cover checklist</h2>
+        <p>Before your interview, ensure you can check off every concept below:</p>
+        <ul class="checkbox-list">
+            <li><input type="checkbox" disabled checked> Memorized the sample database schema and relationships.</li>
+            <li><input type="checkbox" disabled checked> Fluent in <code>SELECT</code>, <code>WHERE</code>, <code>ORDER BY</code>, <code>LIKE</code>, <code>IN</code>.</li>
+            <li><input type="checkbox" disabled checked> Understand the trap of <code>= NULL</code> vs <code>IS NULL</code>.</li>
+            <li><input type="checkbox" disabled checked> Can confidently explain <code>INNER</code> vs <code>LEFT</code> vs <code>FULL OUTER</code> joins.</li>
+            <li><input type="checkbox" disabled checked> Can write <code>GROUP BY</code> queries using <code>HAVING</code> correctly.</li>
+            <li><input type="checkbox" disabled checked> Can structure complex logic using <code>WITH</code> (CTEs).</li>
+            <li><input type="checkbox" disabled checked> Mastered <code>ROW_NUMBER()</code>, <code>RANK()</code>, and <code>LAG()</code>.</li>
+            <li><input type="checkbox" disabled checked> Differentiate <code>UNION</code> (dedupes) and <code>UNION ALL</code> (fast).</li>
+            <li><input type="checkbox" disabled checked> Can design tables using <code>PRIMARY KEY</code> and <code>FOREIGN KEY</code>.</li>
+            <li><input type="checkbox" disabled checked> Can explain Clustered vs Non-Clustered Indexes.</li>
+            <li><input type="checkbox" disabled checked> Understand 1NF, 2NF, 3NF, and when to denormalize.</li>
+            <li><input type="checkbox" disabled checked> Can explain Atomicity, Consistency, Isolation, Durability.</li>
+            <li><input type="checkbox" disabled checked> Can solve Top N, Nth highest, and Running Total problems blind.</li>
+            <li><input type="checkbox" disabled checked> Can architect basic Replication and Connection Pooling topologies.</li>
+        </ul>
+        
+        <p style="text-align: center; font-size: 0.8em; color: #888; margin-top: 40px; border-top: 1px solid #eee; padding-top: 20px;">Expanded Expert SQL Handbook — Practice the queries daily.</p>
+    </div>
+</div>
+
+</body>
+</html>
